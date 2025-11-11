@@ -13,7 +13,17 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ['Cormorant Garamond', 'serif'],
+        body: ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
+      },
       colors: {
+        ivory: "hsl(var(--ivory))",
+        champagne: "hsl(var(--champagne))",
+        rosegold: "hsl(var(--rosegold))",
+        taupe: "hsl(var(--taupe))",
+        mauve: "hsl(var(--mauve))",
+        leather: "hsl(var(--leather))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -62,6 +72,10 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      letterSpacing: {
+        'elegant': '0.05em',
+        'widest': '0.15em',
       },
       keyframes: {
         "accordion-down": {
