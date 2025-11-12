@@ -11,10 +11,10 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <h3 className="text-2xl font-serif tracking-widest text-ivory mb-4">
-              AURA
+              Labbaik
             </h3>
             <p className="font-body text-sm text-champagne leading-relaxed">
-              Where light meets craft. Handcrafted adornments in rosegold hues.
+              Elegance in Every Curve. Handcrafted adornments in rosegold hues.
             </p>
           </div>
 
@@ -28,6 +28,7 @@ const Footer = () => {
                 { name: 'Collections', path: '/collections' },
                 { name: 'About', path: '/about' },
                 { name: 'Contact', path: '/contact' },
+                { name: 'Enquiry', path: '/enquiry' },
               ].map((item) => (
                 <Link
                   key={item.name}
@@ -67,7 +68,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="pt-8 border-t border-rosegold/20">
           <p className="font-body text-xs text-champagne text-center tracking-elegant">
-            © {currentYear} AURA Jewelry Atelier. All rights reserved.
+            © {currentYear} Labbaik Jewelry Atelier. All rights reserved.
           </p>
         </div>
       </div>

@@ -32,7 +32,7 @@ const Navbar = () => {
               className="text-2xl md:text-3xl font-serif font-light tracking-widest text-leather"
               whileHover={{ scale: 1.05 }}
             >
-              AURA
+              Labbaik
             </motion.h1>
           </Link>
 
@@ -43,6 +43,7 @@ const Navbar = () => {
               { name: 'Collections', path: '/collections' },
               { name: 'About', path: '/about' },
               { name: 'Contact', path: '/contact' },
+              { name: 'Enquiry', path: '/enquiry' },
             ].map((item) => (
               <Link
                 key={item.name}
