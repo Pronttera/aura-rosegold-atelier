@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h3 className="text-2xl font-serif tracking-widest text-ivory mb-4">
+            <h3 className="text-2xl font-serif font-bold tracking-widest text-ivory mb-4">
               Labbaik
             </h3>
             <p className="font-body text-sm text-champagne leading-relaxed">
@@ -68,7 +68,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="pt-8 border-t border-rosegold/20">
           <p className="font-body text-xs text-champagne text-center tracking-elegant">
-            © {currentYear} Labbaik Jewelry Atelier. All rights reserved.
+            © {currentYear} <span className="font-bold">Labbaik</span> Jewelry Atelier. All rights reserved.
           </p>
         </div>
       </div>

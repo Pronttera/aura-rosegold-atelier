@@ -28,8 +28,8 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/">
-            <motion.h1 
-              className="text-2xl md:text-3xl font-serif font-light tracking-widest text-leather"
+            <motion.h1
+              className="text-2xl md:text-3xl font-serif font-bold tracking-widest text-leather"
               whileHover={{ scale: 1.05 }}
             >
               Labbaik

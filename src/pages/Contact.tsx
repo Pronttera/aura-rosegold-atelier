@@ -177,7 +177,7 @@ const Contact = () => {
                         Email
                       </h3>
                       <p className="font-body text-taupe tracking-elegant">
-                        hello@aurajewelry.com
+                        hello@labbaikjewelry.com
                       </p>
                     </div>
                   </div>

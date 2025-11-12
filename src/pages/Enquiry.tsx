@@ -112,7 +112,7 @@ const Enquiry = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-4xl md:text-5xl font-serif font-light tracking-wide text-leather mb-4"
           >
-            Personalized Adornments by Labbaik
+            Personalized Adornments by <span className="font-bold">Labbaik</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 30 }}

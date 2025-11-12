@@ -18,8 +18,8 @@ const About = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h1 className="text-5xl md:text-7xl font-serif text-leather mb-6 tracking-wide">
-              About AURA
+            <h1 className="text-5xl md:text-7xl font-serif text-leather mb-6 tracking-wide font-bold">
+              About Labbaik
             </h1>
             <p className="font-body text-xl text-taupe max-w-3xl mx-auto tracking-elegant leading-relaxed">
               Where Light Meets Craft
@@ -35,7 +35,7 @@ const About = () => {
             <div className="aspect-[16/9]">
               <img
                 src={hero1}
-                alt="AURA Atelier"
+                alt="Labbaik Atelier"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -56,7 +56,7 @@ const About = () => {
               </h2>
               <div className="w-20 h-[1px] bg-rosegold mb-8" />
               <p className="font-body text-lg text-taupe mb-6 leading-relaxed tracking-elegant">
-                AURA was born from a passion for creating jewelry that captures the essence of light and craftsmanship. Each piece in our collection is handcrafted with meticulous attention to detail, using only the finest materials in warm rosegold tones.
+                <span className="font-bold">Labbaik</span> was born from a passion for creating jewelry that captures the essence of light and craftsmanship. Each piece in our collection is handcrafted with meticulous attention to detail, using only the finest materials in warm rosegold tones.
               </p>
               <p className="font-body text-lg text-taupe leading-relaxed tracking-elegant">
                 We believe jewelry should be more than an accessory—it should be a story, a memory, a piece of art that becomes part of your journey. Our atelier combines traditional techniques with contemporary design, resulting in timeless pieces that celebrate femininity and elegance.
