@@ -20,18 +20,24 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, [location.pathname]);
 
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? 'bg-ivory shadow-soft' : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-ivory shadow-soft' : 'bg-transparent'
+        }`}
     >
       <div className="container mx-auto px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
@@ -57,9 +63,8 @@ const Navbar = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`text-leather hover:text-rosegold transition-colors elegant-underline pb-1 ${
-                  location.pathname === item.path ? 'text-rosegold' : ''
-                }`}
+                className={`text-leather hover:text-rosegold transition-colors elegant-underline pb-1 ${location.pathname === item.path ? 'text-rosegold' : ''
+                  }`}
               >
                 {item.name}
               </Link>
@@ -68,7 +73,7 @@ const Navbar = () => {
 
           {/* Desktop CTA Button */}
           <Link to="/contact" className="hidden md:block">
-            <Button 
+            <Button
               className="bg-gradient-to-r from-rosegold to-mauve hover:shadow-hover transition-all duration-300 text-ivory font-body tracking-elegant"
             >
               Enquire
@@ -104,15 +109,14 @@ const Navbar = () => {
                     key={item.name}
                     to={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`text-lg font-body tracking-elegant text-leather hover:text-rosegold transition-colors py-2 ${
-                      location.pathname === item.path ? 'text-rosegold font-medium' : ''
-                    }`}
+                    className={`text-lg font-body tracking-elegant text-leather hover:text-rosegold transition-colors py-2 ${location.pathname === item.path ? 'text-rosegold font-medium' : ''
+                      }`}
                   >
                     {item.name}
                   </Link>
                 ))}
                 <Link to="/contact" onClick={() => setIsOpen(false)} className="mt-4">
-                  <Button 
+                  <Button
                     className="w-full bg-gradient-to-r from-rosegold to-mauve hover:shadow-hover transition-all duration-300 text-ivory font-body tracking-elegant h-12"
                   >
                     Enquire Now
