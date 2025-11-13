@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { productsData } from '@/data/products';
 import product1 from '@/assets/product-1.jpg';
 import product2 from '@/assets/product-2.jpg';
 import product3 from '@/assets/product-3.jpg';
@@ -51,11 +52,17 @@ const collectionData: Record<string, any> = {
   },
 };
 
+
+
 const CollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const collection = slug ? collectionData[slug] : null;
-
-  if (!collection) {
+  // Replace the existing collection mapping with:
+  const collection = slug ? {
+    name: slug.charAt(0).toUpperCase() + slug.slice(1), // Capitalize the first letter
+    description: `Discover our beautiful collection of ${slug}. Each piece is handcrafted with care and attention to detail.`,
+    products: productsData[slug] || [] // Get products for this category
+  } : null;
+   if (!collection) {
     return (
       <div className="min-h-screen bg-ivory">
         <Navbar />
@@ -73,18 +80,18 @@ const CollectionDetail = () => {
   return (
     <div className="min-h-screen bg-ivory">
       <Navbar />
-      
+
       <main className="pt-24 pb-16">
         {/* Header */}
         <section className="container mx-auto px-6 mb-12">
-          <Link 
-            to="/collections" 
+          <Link
+            to="/collections"
             className="inline-flex items-center gap-2 text-leather hover:text-rosegold transition-colors font-body text-sm mb-8 elegant-underline"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Collections
           </Link>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -103,30 +110,34 @@ const CollectionDetail = () => {
         <section className="container mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {collection.products.map((product: any, index: number) => (
-              <motion.div
+              <Link
                 key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group"
+                to={`/collections/${slug}/${product.id}`}
+                className="block group"
               >
-                <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
-                  <div className="aspect-square overflow-hidden bg-champagne">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
+                    <div className="aspect-square overflow-hidden bg-champagne">
+                      <img
+                        src={product.heroImage}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-rosegold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
-                  <div className="absolute inset-0 bg-rosegold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
-                <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
-                  {product.name}
-                </h3>
-                <p className="font-body text-taupe tracking-elegant">
-                  {product.price}
-                </p>
-              </motion.div>
+                  <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
+                    {product.name}
+                  </h3>
+                  <p className="font-body text-taupe tracking-elegant">
+                    {product.price}
+                  </p>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </section>
