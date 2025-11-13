@@ -91,7 +91,7 @@ const Navbar = () => {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-ivory border-taupe w-[280px] sm:w-[320px]">
+            <SheetContent side="right" className="bg-ivory border-taupe w-full sm:w-[320px]">
               <SheetHeader>
                 <SheetTitle className="font-serif text-2xl tracking-widest text-leather">
                   Labbaik
