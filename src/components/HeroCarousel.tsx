@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import hero1 from '@/assets/hero-1.jpg';
 import hero2 from '@/assets/hero-2.jpg';
 import hero3 from '@/assets/hero-3.jpg';
-
+import { useNavigate } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
@@ -17,6 +17,7 @@ const slides = [
 ];
 
 const HeroCarousel = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative h-[70vh] sm:h-[80vh] md:h-screen w-full" id="home">
       <Swiper
@@ -63,7 +64,7 @@ const HeroCarousel = () => {
           >
             Where Light Meets Craft
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -78,9 +79,10 @@ const HeroCarousel = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 1.1 }}
           >
-            <Button 
+            <Button
               size="lg"
               className="bg-gradient-to-r from-rosegold to-mauve hover:shadow-hover transition-all duration-300 text-ivory font-body tracking-elegant px-8 sm:px-10 py-5 sm:py-6 text-sm sm:text-base h-12 sm:h-auto"
+              onClick={() => navigate('/collections')}
             >
               Explore Our Collection
             </Button>
