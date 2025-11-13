@@ -34,16 +34,16 @@ const CategoryGrid = () => {
   };
 
   return (
-    <section className="py-24 px-6 bg-champagne" id="collections">
+    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 bg-champagne" id="collections">
       <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-serif font-light text-leather mb-4 tracking-wide">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-light text-leather mb-3 sm:mb-4 tracking-wide">
             Our Collections
           </h2>
           <div className="w-24 h-px bg-rosegold mx-auto" />
@@ -54,7 +54,7 @@ const CategoryGrid = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
           {categories.map((category, index) => (
             <motion.div

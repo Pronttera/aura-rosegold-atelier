@@ -39,27 +39,27 @@ const Collections = () => {
     <div className="min-h-screen bg-ivory">
       <Navbar />
       
-      <main className="pt-24 pb-16">
+      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
         {/* Hero Section */}
-        <section className="container mx-auto px-6 mb-16">
+        <section className="container mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="text-5xl md:text-6xl font-serif text-leather mb-4 tracking-wide">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-leather mb-3 sm:mb-4 tracking-wide">
               Our Collections
             </h1>
-            <p className="font-body text-lg text-taupe max-w-2xl mx-auto tracking-elegant">
+            <p className="font-body text-base sm:text-lg text-taupe max-w-2xl mx-auto tracking-elegant px-4">
               Explore our curated selection of handcrafted jewelry, each piece telling its own story
             </p>
           </motion.div>
         </section>
 
         {/* Collections Grid */}
-        <section className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {collections.map((collection, index) => (
               <motion.div
                 key={collection.slug}

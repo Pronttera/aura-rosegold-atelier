@@ -74,12 +74,12 @@ const CollectionDetail = () => {
     <div className="min-h-screen bg-ivory">
       <Navbar />
       
-      <main className="pt-24 pb-16">
+      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
         {/* Header */}
-        <section className="container mx-auto px-6 mb-12">
+        <section className="container mx-auto px-4 sm:px-6 mb-8 sm:mb-12">
           <Link 
             to="/collections" 
-            className="inline-flex items-center gap-2 text-leather hover:text-rosegold transition-colors font-body text-sm mb-8 elegant-underline"
+            className="inline-flex items-center gap-2 text-leather hover:text-rosegold transition-colors font-body text-sm mb-6 sm:mb-8 elegant-underline"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Collections
@@ -90,18 +90,18 @@ const CollectionDetail = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-5xl md:text-6xl font-serif text-leather mb-4 tracking-wide">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-leather mb-3 sm:mb-4 tracking-wide">
               {collection.name}
             </h1>
-            <p className="font-body text-lg text-taupe max-w-2xl tracking-elegant">
+            <p className="font-body text-base sm:text-lg text-taupe max-w-2xl tracking-elegant">
               {collection.description}
             </p>
           </motion.div>
         </section>
 
         {/* Products Grid */}
-        <section className="container mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <section className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {collection.products.map((product: any, index: number) => (
               <motion.div
                 key={product.id}
@@ -120,10 +120,10 @@ const CollectionDetail = () => {
                   </div>
                   <div className="absolute inset-0 bg-rosegold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-                <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
+                <h3 className="font-serif text-lg sm:text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
                   {product.name}
                 </h3>
-                <p className="font-body text-taupe tracking-elegant">
+                <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">
                   {product.price}
                 </p>
               </motion.div>

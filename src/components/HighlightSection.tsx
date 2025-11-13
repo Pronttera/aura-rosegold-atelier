@@ -3,9 +3,9 @@ import signatureImg from '@/assets/signature-collection.jpg';
 
 const HighlightSection = () => {
   return (
-    <section className="py-24 px-6 bg-ivory">
+    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 bg-ivory">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -41,7 +41,7 @@ const HighlightSection = () => {
                 className="h-px bg-rosegold mb-6"
               />
               
-              <h2 className="text-4xl md:text-5xl font-serif font-light text-leather mb-4 tracking-wide">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-light text-leather mb-3 sm:mb-4 tracking-wide">
                 The Signature Collection
               </h2>
             </div>

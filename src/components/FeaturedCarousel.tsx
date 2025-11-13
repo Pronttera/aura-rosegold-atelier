@@ -19,20 +19,20 @@ const products = [
 
 const FeaturedCarousel = () => {
   return (
-    <section className="py-24 px-6 bg-champagne" id="featured">
+    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 bg-champagne" id="featured">
       <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-serif font-light text-leather mb-4 tracking-wide">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-light text-leather mb-3 sm:mb-4 tracking-wide">
             Featured Pieces
           </h2>
-          <div className="w-24 h-px bg-rosegold mx-auto mb-4" />
-          <p className="text-base font-body text-taupe tracking-elegant">
+          <div className="w-24 h-px bg-rosegold mx-auto mb-3 sm:mb-4" />
+          <p className="text-sm sm:text-base font-body text-taupe tracking-elegant">
             Handpicked treasures from our latest collection
           </p>
         </motion.div>
@@ -89,12 +89,12 @@ const FeaturedCarousel = () => {
             ))}
           </Swiper>
 
-          {/* Custom Navigation */}
-          <button className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-ivory hover:bg-mauve text-leather hover:text-ivory w-12 h-12 rounded-full shadow-soft flex items-center justify-center transition-all duration-300 hover:shadow-hover">
-            <ChevronLeft className="w-6 h-6" />
+          {/* Custom Navigation - Hidden on mobile */}
+          <button className="swiper-button-prev-custom hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-ivory hover:bg-mauve text-leather hover:text-ivory w-11 h-11 md:w-12 md:h-12 rounded-full shadow-soft items-center justify-center transition-all duration-300 hover:shadow-hover">
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
           </button>
-          <button className="swiper-button-next-custom absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-ivory hover:bg-mauve text-leather hover:text-ivory w-12 h-12 rounded-full shadow-soft flex items-center justify-center transition-all duration-300 hover:shadow-hover">
-            <ChevronRight className="w-6 h-6" />
+          <button className="swiper-button-next-custom hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-ivory hover:bg-mauve text-leather hover:text-ivory w-11 h-11 md:w-12 md:h-12 rounded-full shadow-soft items-center justify-center transition-all duration-300 hover:shadow-hover">
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
           </button>
         </div>
       </div>
