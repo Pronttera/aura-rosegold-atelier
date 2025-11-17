@@ -22,7 +22,7 @@ const About = () => {
               About Labbaik
             </h1>
             <p className="font-body text-base sm:text-lg md:text-xl text-taupe max-w-3xl mx-auto tracking-elegant leading-relaxed px-4">
-              Where Light Meets Craft
+              Heritage Rooted in Pune, Crafted for the World
             </p>
           </motion.div>
 
@@ -52,14 +52,17 @@ const About = () => {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-leather mb-4 sm:mb-6 tracking-wide">
-                Our Philosophy
+                Our Story
               </h2>
               <div className="w-20 h-[1px] bg-rosegold mb-6 sm:mb-8" />
               <p className="font-body text-base sm:text-lg text-taupe mb-4 sm:mb-6 leading-relaxed tracking-elegant">
-                <span className="font-bold">Labbaik</span> was born from a passion for creating jewelry that captures the essence of light and craftsmanship. Each piece in our collection is handcrafted with meticulous attention to detail, using only the finest materials in warm rosegold tones.
+                <span className="font-bold">Labbaik Jewellers</span> began as a cherished jewellery house in the heart of Pune, India—serving families across Kondhwa and Hadapsar with bridal treasures, traditional Kundan and Polki masterpieces, delicate matha pattis, and timeless necklaces. Our roots are steeped in the artistry of certified, hallmarked craftsmanship—every piece bearing the BIS Hallmark and backed by a lifetime exchange promise.
+              </p>
+              <p className="font-body text-base sm:text-lg text-taupe mb-4 sm:mb-6 leading-relaxed tracking-elegant">
+                But Labbaik is more than a showroom. It is an atelier—a sanctuary where heritage meets innovation. We reimagine traditional motifs through a contemporary lens, transforming ancestral designs into modern heirlooms. Each creation is handcrafted with meticulous care, blending the romance of rosegold tones with the precision of certified gemstones.
               </p>
               <p className="font-body text-base sm:text-lg text-taupe leading-relaxed tracking-elegant">
-                We believe jewelry should be more than an accessory—it should be a story, a memory, a piece of art that becomes part of your journey. Our atelier combines traditional techniques with contemporary design, resulting in timeless pieces that celebrate femininity and elegance.
+                We believe jewellery should be intimate—an extension of your story, your emotion, your identity. Whether you visit us in Pune or discover us online, you enter a world where light meets craft, and every piece is designed to be treasured across generations.
               </p>
             </motion.div>
 
@@ -91,22 +94,26 @@ const About = () => {
               transition={{ duration: 0.6 }}
               className="text-3xl sm:text-4xl md:text-5xl font-serif text-leather text-center mb-10 sm:mb-12 md:mb-16 tracking-wide"
             >
-              Our Values
+              Our Commitment
             </motion.h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 md:gap-12 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 md:gap-12 max-w-6xl mx-auto">
               {[
                 {
-                  title: 'Craftsmanship',
-                  description: 'Every piece is meticulously handcrafted by skilled artisans, ensuring unparalleled quality and attention to detail.',
+                  title: 'Certified Excellence',
+                  description: '100% BIS Hallmarked jewellery with lifetime exchange. Every piece is certified, ensuring authenticity and lasting value.',
                 },
                 {
-                  title: 'Timeless Design',
-                  description: 'We create jewelry that transcends trends, designed to be treasured for generations to come.',
+                  title: 'Bespoke Craftsmanship',
+                  description: 'From bridal collections to custom designs, we handcraft modern heirlooms using traditional techniques and contemporary aesthetics.',
+                },
+                {
+                  title: '7-Day Custom Guarantee',
+                  description: 'Share your vision, and we will bring it to life within 7 days—our signature promise of personalized artistry and care.',
                 },
                 {
                   title: 'Ethical Sourcing',
-                  description: 'We are committed to using responsibly sourced materials and supporting sustainable practices.',
+                  description: 'We honor the earth and the hands that craft. Responsibly sourced materials, sustainable practices, timeless design.',
                 },
               ].map((value, index) => (
                 <motion.div
@@ -126,6 +133,65 @@ const About = () => {
                 </motion.div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Founder's Vision Section */}
+        <section className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <div className="w-20 h-[1px] bg-rosegold mx-auto mb-6 sm:mb-8" />
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-leather mb-6 sm:mb-8 tracking-wide">
+              From Our Atelier
+            </h2>
+            <p className="font-body text-base sm:text-lg text-taupe leading-relaxed tracking-elegant mb-6">
+              "I founded Labbaik with a simple belief: that jewellery is not just adornment, but a keeper of moments. Growing up surrounded by the artistry of Pune's jewellery heritage, I witnessed how a single piece could carry generations of love, celebration, and memory."
+            </p>
+            <p className="font-body text-base sm:text-lg text-taupe leading-relaxed tracking-elegant mb-6">
+              "Today, we bridge the intimacy of our Kondhwa and Hadapsar showrooms with a global vision—offering bespoke designs that honor tradition yet embrace modern elegance. Every piece we craft is a conversation between past and present, between you and the artisans who bring your vision to life."
+            </p>
+            <p className="font-body text-base sm:text-lg text-leather italic leading-relaxed tracking-elegant">
+              — The Labbaik Atelier Team
+            </p>
+          </motion.div>
+        </section>
+
+        {/* Closing Invitation Section */}
+        <section className="bg-ivory py-12 sm:py-16 md:py-20 border-t border-mauve/20">
+          <div className="container mx-auto px-4 sm:px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="max-w-3xl mx-auto text-center"
+            >
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-leather mb-6 sm:mb-8 tracking-wide">
+                Begin Your Journey
+              </h2>
+              <p className="font-body text-base sm:text-lg text-taupe leading-relaxed tracking-elegant mb-8 sm:mb-10">
+                Explore our signature collections, discover the stories woven into each design, or share your own vision with us. Whether you seek a timeless heirloom or a bespoke creation, we'll bring it to life with care, passion, and our 7-Day Custom Jewellery Guarantee.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a
+                  href="/collections"
+                  className="inline-block px-8 py-3 bg-rosegold text-ivory font-body tracking-elegant rounded-md hover:bg-leather transition-colors shadow-soft"
+                >
+                  Explore Collections
+                </a>
+                <a
+                  href="/enquiry"
+                  className="inline-block px-8 py-3 border border-rosegold text-rosegold font-body tracking-elegant rounded-md hover:bg-rosegold hover:text-ivory transition-colors"
+                >
+                  Share Your Vision
+                </a>
+              </div>
+            </motion.div>
           </div>
         </section>
       </main>
