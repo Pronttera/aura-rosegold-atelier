@@ -60,7 +60,7 @@ const About = () => {
                 <span className="font-bold">Labbaik Jewellers</span> began as a cherished jewellery house in the heart of Pune, India—serving families across Kondhwa and Hadapsar with bridal treasures, traditional Kundan and Polki masterpieces, delicate matha pattis, and timeless necklaces. Our roots are steeped in the artistry of certified, hallmarked craftsmanship—every piece bearing the BIS Hallmark and backed by a lifetime exchange promise.
               </p>
               <p className="font-body text-base sm:text-lg text-taupe mb-4 sm:mb-6 leading-relaxed tracking-elegant">
-                But Labbaik is more than a showroom. It is an atelier—a sanctuary where heritage meets innovation. We reimagine traditional motifs through a contemporary lens, transforming ancestral designs into modern heirlooms. Each creation is handcrafted with meticulous care, blending the romance of rosegold tones with the precision of certified gemstones.
+                But Labbaik is more than a showroom. It is a sanctuary where heritage meets innovation. We reimagine traditional motifs through a contemporary lens, transforming ancestral designs into modern heirlooms. Each creation is handcrafted with meticulous care, blending the romance of rosegold tones with the precision of certified gemstones.
               </p>
               <p className="font-body text-base sm:text-lg text-taupe leading-relaxed tracking-elegant">
                 We believe jewellery should be intimate—an extension of your story, your emotion, your identity. Whether you visit us in Pune or discover us online, you enter a world where light meets craft, and every piece is designed to be treasured across generations.
@@ -148,7 +148,7 @@ const About = () => {
           >
             <div className="w-20 h-[1px] bg-rosegold mx-auto mb-6 sm:mb-8" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-leather mb-6 sm:mb-8 tracking-wide">
-              From Our Atelier
+              From Our Lab
             </h2>
             <p className="font-body text-base sm:text-lg text-taupe leading-relaxed tracking-elegant mb-6">
               "I founded Labbaik with a simple belief: that jewellery is not just adornment, but a keeper of moments. Growing up surrounded by the artistry of Pune's jewellery heritage, I witnessed how a single piece could carry generations of love, celebration, and memory."
@@ -157,7 +157,7 @@ const About = () => {
               "Today, we bridge the intimacy of our Kondhwa and Hadapsar showrooms with a global vision—offering bespoke designs that honor tradition yet embrace modern elegance. Every piece we craft is a conversation between past and present, between you and the artisans who bring your vision to life."
             </p>
             <p className="font-body text-base sm:text-lg text-leather italic leading-relaxed tracking-elegant">
-              — The Labbaik Atelier Team
+              — The Labbaik Team
             </p>
           </motion.div>
         </section>

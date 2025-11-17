@@ -195,7 +195,7 @@ const Contact = () => {
             >
               <div>
                 <h2 className="text-2xl sm:text-3xl font-serif text-leather mb-6 sm:mb-8 tracking-wide">
-                  Visit Our Atelier
+                  Visit Our Shop
                 </h2>
 
                 <div className="space-y-5 sm:space-y-6">
@@ -204,13 +204,10 @@ const Contact = () => {
                       <MapPin className="w-5 h-5 text-rosegold" />
                     </div>
                     <div>
-                      <h3 className="font-serif text-base sm:text-lg text-leather mb-1 tracking-elegant">
-                        Location
-                      </h3>
-                      <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">
-                        123 Atelier Street<br />
-                        Arts District, CA 90013
-                      </p>
+                      <h4 className="font-serif text-base sm:text-lg text-leather mb-1 tracking-elegant">Our Location</h4>
+                      <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">Shop No.4, Konark Shopping Hub</p>
+                      <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">Opp. Satyanand Hospital, Kondhwa Kurd</p>
+                      <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">Near HDFC Bank, Pune, Maharashtra 411048</p>
                     </div>
                   </div>
 
@@ -223,7 +220,7 @@ const Contact = () => {
                         Phone
                       </h3>
                       <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">
-                        +1 (555) 123-4567
+                        +91 9876543210
                       </p>
                     </div>
                   </div>
@@ -246,7 +243,7 @@ const Contact = () => {
 
               <div className="bg-champagne rounded-lg p-6 sm:p-8">
                 <h3 className="font-serif text-lg sm:text-xl text-leather mb-3 sm:mb-4 tracking-elegant">
-                  Atelier Hours
+                  Working Hours
                 </h3>
                 <div className="space-y-2 font-body text-sm sm:text-base text-taupe tracking-elegant">
                   <p>Monday - Friday: 10am - 6pm</p>

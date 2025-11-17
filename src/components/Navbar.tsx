@@ -10,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import logo from '../assets/Logo/Logo.png'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,16 +40,15 @@ const Navbar = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-ivory shadow-soft' : 'bg-transparent'
         }`}
     >
-      <div className="container mx-auto px-4 sm:px-6 py-4">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="z-50">
-            <motion.h1
-              className="text-xl sm:text-2xl md:text-3xl font-serif font-bold tracking-widest text-leather"
-              whileHover={{ scale: 1.05 }}
-            >
-              Labbaik
-            </motion.h1>
+          <Link to="/">
+            <img
+              src={logo}
+              alt="Labbaik Logo"
+              className="w-56 h-auto"
+            />
           </Link>
 
           {/* Desktop Navigation Links */}
