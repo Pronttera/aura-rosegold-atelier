@@ -32,32 +32,51 @@ const ContactSchema = Yup.object().shape({
 const Contact = () => {
   const { toast } = useToast();
 
-  const handleSubmit = async (values: { name: string; email: string; phone: string; message: string }, { setSubmitting, resetForm }: any) => {
+  const handleSubmit = async (
+    values: { name: string; email: string; phone: string; message: string },
+    { setSubmitting, resetForm }: any
+  ) => {
     try {
-      // Simulate form submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const { name, email, phone, message } = values;
+
+      // Format WhatsApp message
+      const whatsappMessage =
+        `*New Contact Form Enquiry*%0A%0A` +
+        `*Name:* ${name}%0A` +
+        `*Email:* ${email}%0A` +
+        `*Phone:* ${phone}%0A` +
+        `*Message:* ${message}%0A`;
+
+      // Replace with your WhatsApp number
+      const whatsappNumber = "9834174885";
+
+      const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+      // Redirect user to WhatsApp
+      window.open(whatsappURL, "_blank");
 
       toast({
-        title: 'Message Sent',
-        description: 'Thank you for your inquiry. We will be in touch soon.',
+        title: "Redirecting to WhatsApp...",
+        description: "Please complete your enquiry on WhatsApp.",
       });
 
       resetForm();
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'There was an error sending your message. Please try again.',
-        variant: 'destructive',
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setSubmitting(false);
     }
   };
 
+
   return (
     <div className="min-h-screen bg-ivory">
       <Navbar />
-      
+
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
         {/* Header */}
         <section className="container mx-auto px-4 sm:px-6 mb-12 sm:mb-16">
@@ -105,9 +124,8 @@ const Contact = () => {
                         id="name"
                         name="name"
                         type="text"
-                        className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold ${
-                          errors.name && touched.name ? 'border-red-500' : ''
-                        }`}
+                        className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold ${errors.name && touched.name ? 'border-red-500' : ''
+                          }`}
                       />
                       <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -121,9 +139,8 @@ const Contact = () => {
                         id="email"
                         name="email"
                         type="email"
-                        className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold ${
-                          errors.email && touched.email ? 'border-red-500' : ''
-                        }`}
+                        className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold ${errors.email && touched.email ? 'border-red-500' : ''
+                          }`}
                       />
                       <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -137,9 +154,8 @@ const Contact = () => {
                         id="phone"
                         name="phone"
                         type="tel"
-                        className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold ${
-                          errors.phone && touched.phone ? 'border-red-500' : ''
-                        }`}
+                        className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold ${errors.phone && touched.phone ? 'border-red-500' : ''
+                          }`}
                       />
                       <ErrorMessage name="phone" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -153,9 +169,8 @@ const Contact = () => {
                         id="message"
                         name="message"
                         rows={6}
-                        className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold resize-none ${
-                          errors.message && touched.message ? 'border-red-500' : ''
-                        }`}
+                        className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold resize-none ${errors.message && touched.message ? 'border-red-500' : ''
+                          }`}
                       />
                       <ErrorMessage name="message" component="div" className="text-red-500 text-sm mt-1" />
                     </div>
@@ -182,7 +197,7 @@ const Contact = () => {
                 <h2 className="text-2xl sm:text-3xl font-serif text-leather mb-6 sm:mb-8 tracking-wide">
                   Visit Our Atelier
                 </h2>
-                
+
                 <div className="space-y-5 sm:space-y-6">
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-champagne flex items-center justify-center flex-shrink-0">

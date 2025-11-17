@@ -36,29 +36,20 @@ const Enquiry = () => {
     },
     validationSchema,
     onSubmit: () => {
-      const { name, email, phone, message } = formik.values;
 
-      const formattedMessage =
-        `*Name:* ${name}%0A` +
-        `*Email:* ${email}%0A` +
-        `*Phone:* ${phone}%0A` +
-        `*Message:* ${message}%0A` +
-        `_This enquiry was sent from Labbaik website_`;
-
-      const phoneNumber = "9834174885";
-
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${formattedMessage}`;
-
+      // 💬 Show success notification instead of WhatsApp redirect
       toast({
-        title: "Redirecting to WhatsApp...",
-        description: "Please complete your enquiry on WhatsApp.",
+        title: "Enquiry Submitted",
+        description: "Thank you! We have received your enquiry and will contact you soon.",
       });
 
-      window.open(whatsappUrl, "_blank");
+      // Reset form
+      formik.resetForm();
+      setUploadedImage(null);
     },
   });
 
-  // Image upload
+  // Image upload handling
   const handleImageUpload = (file: File) => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
@@ -194,7 +185,7 @@ const Enquiry = () => {
               )}
             </motion.div>
 
-            {/* Image Upload — FIXED (No screen overlay issue) */}
+            {/* Image Upload */}
             <motion.div custom={4} initial="hidden" whileInView="visible" variants={fadeUpVariants}>
               <Label>Upload Reference Image</Label>
 
@@ -245,7 +236,7 @@ const Enquiry = () => {
                 className="w-full bg-gradient-to-r from-rosegold to-mauve text-ivory py-5"
               >
                 <MessageSquare className="mr-2" />
-                Send Enquiry via WhatsApp
+                Submit Enquiry
               </Button>
             </motion.div>
 
