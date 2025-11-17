@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import product1 from '@/assets/product-1.jpg';
 import product2 from '@/assets/product-2.jpg';
 import product3 from '@/assets/product-3.jpg';
@@ -11,10 +12,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 const products = [
-  { name: 'Luna Ring', price: '€245', image: product1 },
-  { name: 'Celestial Hoops', price: '€320', image: product2 },
-  { name: 'Pearl Pendant', price: '€280', image: product3 },
-  { name: 'Halo Bracelet', price: '€195', image: product4 },
+  { name: 'Luna Ring', price: '€245', image: product1, category: 'rings', id: 1 },
+  { name: 'Celestial Hoops', price: '€320', image: product2, category: 'earrings', id: 8 },
+  { name: 'Pearl Pendant', price: '€280', image: product3, category: 'necklaces', id: 11 },
+  { name: 'Halo Bracelet', price: '€195', image: product4, category: 'bracelets', id: 16 },
 ];
 
 const FeaturedCarousel = () => {
@@ -60,31 +61,33 @@ const FeaturedCarousel = () => {
           >
             {products.map((product, index) => (
               <SwiperSlide key={index}>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group cursor-pointer"
-                >
-                  <div className="relative overflow-hidden rounded-lg shadow-soft bg-ivory mb-4 aspect-square">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-leather/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                  
-                  <div className="text-center">
-                    <h3 className="text-lg font-serif text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm font-body text-taupe tracking-wide">
-                      {product.price}
-                    </p>
-                  </div>
-                </motion.div>
+                <Link to={`/collections/${product.category}/${product.id}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="group cursor-pointer"
+                  >
+                    <div className="relative overflow-hidden rounded-lg shadow-soft bg-ivory mb-4 aspect-square">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-leather/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </div>
+                    
+                    <div className="text-center">
+                      <h3 className="text-lg font-serif text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
+                        {product.name}
+                      </h3>
+                      <p className="text-sm font-body text-taupe tracking-wide">
+                        {product.price}
+                      </p>
+                    </div>
+                  </motion.div>
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>
