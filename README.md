@@ -32,8 +32,45 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Set up environment variables for Prismic CMS
+cp .env.example .env
+# Edit .env and add your Prismic credentials
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
 npm run dev
+```
+
+## 🎨 Prismic CMS Integration
+
+This project is integrated with [Prismic CMS](https://prismic.io/) for content management.
+
+### Quick Setup
+
+1. **Create a Prismic account** at [https://prismic.io/](https://prismic.io/)
+2. **Create a new repository** for your project
+3. **Copy `.env.example` to `.env`** and add your Prismic credentials:
+   ```bash
+   cp .env.example .env
+   ```
+4. **Update the `.env` file** with your repository details:
+   ```env
+   VITE_PRISMIC_REPOSITORY_NAME=your-repository-name
+   VITE_PRISMIC_ACCESS_TOKEN=your-access-token
+   ```
+
+### 📚 Documentation
+
+For detailed setup instructions and usage examples, see [PRISMIC_SETUP.md](./PRISMIC_SETUP.md)
+
+### 🚀 Features
+
+- ✅ Prismic client configuration with environment variables
+- ✅ Custom React hooks for easy data fetching
+- ✅ TypeScript support with type-safe environment variables
+- ✅ PrismicProvider for app-wide context
+- ✅ Helper functions for common queries
+- ✅ Example component demonstrating usage
+
 ```
 
 **Edit a file directly in GitHub**
