@@ -1,83 +1,55 @@
-import * as prismic from '@prismicio/client';
+import * as prismic from "@prismicio/client";
 
 /**
- * Prismic Client Configuration
- * 
- * This file sets up the Prismic client for fetching content from your Prismic repository.
- * Make sure to set the required environment variables in your .env file.
+ * Prismic Client Setup
  */
 
-// Get environment variables
+// Environment Variables
+const endpoint = import.meta.env.VITE_PRISMIC_ENDPOINT;
 const repositoryName = import.meta.env.VITE_PRISMIC_REPOSITORY_NAME;
 const accessToken = import.meta.env.VITE_PRISMIC_ACCESS_TOKEN;
 
-// Validate required environment variables
-if (!repositoryName) {
+if (!endpoint) {
   throw new Error(
-    'VITE_PRISMIC_REPOSITORY_NAME is not defined. Please add it to your .env file.'
+    "VITE_PRISMIC_ENDPOINT is missing. Add it to your .env file."
   );
 }
 
-/**
- * Creates and configures a Prismic client instance
- * @returns Configured Prismic client
- */
+if (!repositoryName) {
+  throw new Error(
+    "VITE_PRISMIC_REPOSITORY_NAME is missing. Add it to your .env file."
+  );
+}
+
 export const createClient = (config: prismic.ClientConfig = {}) => {
-  const client = prismic.createClient(repositoryName, {
+  return prismic.createClient(endpoint, {
     accessToken: accessToken || undefined,
     ...config,
   });
-
-  return client;
 };
 
-/**
- * Default Prismic client instance
- * Use this for most queries throughout your application
- */
+// Default shared client
 export const prismicClient = createClient();
 
 /**
- * Helper function to get all documents of a specific type
- * @param documentType - The type of document to fetch
- * @returns Promise with all documents of the specified type
+ * Helpers
  */
+
 export const getAllByType = async (documentType: string) => {
-  const client = createClient();
-  return await client.getAllByType(documentType);
+  return await prismicClient.getAllByType(documentType);
 };
 
-/**
- * Helper function to get a single document by UID
- * @param documentType - The type of document to fetch
- * @param uid - The unique identifier of the document
- * @returns Promise with the document
- */
 export const getByUID = async (documentType: string, uid: string) => {
-  const client = createClient();
-  return await client.getByUID(documentType, uid);
+  return await prismicClient.getByUID(documentType, uid);
 };
 
-/**
- * Helper function to get a single document by ID
- * @param id - The ID of the document
- * @returns Promise with the document
- */
 export const getByID = async (id: string) => {
-  const client = createClient();
-  return await client.getByID(id);
+  return await prismicClient.getByID(id);
 };
 
-/**
- * Helper function to query documents with custom predicates
- * @param predicates - Prismic predicates for filtering
- * @param options - Additional query options
- * @returns Promise with query results
- */
 export const query = async (
-  predicates: string | string[],
+  predicates: prismic.Predicate[],
   options?: prismic.BuildQueryURLArgs
 ) => {
-  const client = createClient();
-  return await client.get({ predicates, ...options });
+  return await prismicClient.get({ predicates, ...options });
 };

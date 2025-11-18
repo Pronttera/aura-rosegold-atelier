@@ -1,73 +1,75 @@
-import { motion } from 'framer-motion';
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { productsData } from '@/data/products';
-import product1 from '@/assets/product-1.jpg';
-import product2 from '@/assets/product-2.jpg';
-import product3 from '@/assets/product-3.jpg';
-import product4 from '@/assets/product-4.jpg';
-
-const collectionData: Record<string, any> = {
-  rings: {
-    name: 'Rings',
-    description: 'Delicate bands and statement pieces crafted in warm rosegold tones',
-    products: [
-      { id: 1, name: 'Ethereal Band', price: '$285', image: product1 },
-      { id: 2, name: 'Signature Solitaire', price: '$425', image: product2 },
-      { id: 3, name: 'Twisted Elegance', price: '$320', image: product3 },
-      { id: 4, name: 'Minimalist Stack', price: '$195', image: product4 },
-    ],
-  },
-  earrings: {
-    name: 'Earrings',
-    description: 'Graceful drops and elegant studs that catch the light',
-    products: [
-      { id: 5, name: 'Pearl Drop', price: '$245', image: product1 },
-      { id: 6, name: 'Hoop Whisper', price: '$180', image: product2 },
-      { id: 7, name: 'Celestial Studs', price: '$165', image: product3 },
-      { id: 8, name: 'Chain Dangle', price: '$210', image: product4 },
-    ],
-  },
-  necklaces: {
-    name: 'Necklaces',
-    description: 'Refined chains and pendants for everyday elegance',
-    products: [
-      { id: 9, name: 'Layered Chain', price: '$385', image: product1 },
-      { id: 10, name: 'Pendant Charm', price: '$295', image: product2 },
-      { id: 11, name: 'Delicate Bar', price: '$225', image: product3 },
-      { id: 12, name: 'Statement Collar', price: '$475', image: product4 },
-    ],
-  },
-  bracelets: {
-    name: 'Bracelets',
-    description: 'Timeless cuffs and charms that adorn the wrist',
-    products: [
-      { id: 13, name: 'Cuff Elegance', price: '$340', image: product1 },
-      { id: 14, name: 'Chain Bracelet', price: '$265', image: product2 },
-      { id: 15, name: 'Charm Story', price: '$310', image: product3 },
-      { id: 16, name: 'Bangle Set', price: '$285', image: product4 },
-    ],
-  },
-};
-
-
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useParams, Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { asText } from "@prismicio/client";
+import { usePrismicDocumentByUID } from "@/hooks/usePrismic";
+import { prismicClient } from "@/lib/prismic";
+import * as prismic from "@prismicio/client";
 
 const CollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  // Replace the existing collection mapping with:
-  const collection = slug ? {
-    name: slug.charAt(0).toUpperCase() + slug.slice(1), // Capitalize the first letter
-    description: `Discover our beautiful collection of ${slug}. Each piece is handcrafted with care and attention to detail.`,
-    products: productsData[slug] || [] // Get products for this category
-  } : null;
-   if (!collection) {
+
+  // Fetch the collection
+  const {
+    data: collection,
+    loading: collectionLoading,
+    error: collectionError,
+  } = usePrismicDocumentByUID("product_type", slug ?? "");
+
+  const [products, setProducts] = useState<any[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  // Fetch products linked to this collection
+  useEffect(() => {
+    const loadProducts = async () => {
+      if (!collection) return;
+
+      try {
+        setLoadingProducts(true);
+
+        const productResults = await prismicClient.getAllByType(
+          "product_details",
+          {
+            filters: [
+              prismic.filter.at("my.product_details.category", collection.id),
+            ],
+            pageSize: 100,
+          }
+        );
+
+        setProducts(productResults);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setProducts([]);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    loadProducts();
+  }, [collection]);
+
+  // Loading UI
+  if (collectionLoading) {
+    return (
+      <div className="min-h-screen bg-ivory flex items-center justify-center">
+        <p>Loading collection...</p>
+      </div>
+    );
+  }
+
+  // Not found
+  if (collectionError || !collection) {
     return (
       <div className="min-h-screen bg-ivory">
         <Navbar />
         <div className="container mx-auto px-6 pt-32 pb-16 text-center">
-          <h1 className="text-4xl font-serif text-leather mb-4">Collection Not Found</h1>
+          <h1 className="text-4xl font-serif text-leather mb-4">
+            Collection Not Found
+          </h1>
           <Link to="/collections" className="text-rosegold hover:underline font-body">
             Return to Collections
           </Link>
@@ -77,15 +79,19 @@ const CollectionDetail = () => {
     );
   }
 
+  // Extract content
+  const title = asText(collection.data.category_type);
+  const description = asText(collection.data.category_description);
+
   return (
     <div className="min-h-screen bg-ivory">
       <Navbar />
-      
+
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
-        {/* Header */}
+        {/* HEADER */}
         <section className="container mx-auto px-4 sm:px-6 mb-8 sm:mb-12">
-          <Link 
-            to="/collections" 
+          <Link
+            to="/collections"
             className="inline-flex items-center gap-2 text-leather hover:text-rosegold transition-colors font-body text-sm mb-6 sm:mb-8 elegant-underline"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -98,48 +104,68 @@ const CollectionDetail = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-leather mb-3 sm:mb-4 tracking-wide">
-              {collection.name}
+              {title}
             </h1>
             <p className="font-body text-base sm:text-lg text-taupe max-w-2xl tracking-elegant">
-              {collection.description}
+              {description}
             </p>
           </motion.div>
         </section>
 
-        {/* Products Grid */}
+        {/* PRODUCTS GRID */}
         <section className="container mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {collection.products.map((product: any, index: number) => (
-              <Link
-                key={product.id}
-                to={`/collections/${slug}/${product.id}`}
-                className="block group"
-              >
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
-                    <div className="aspect-square overflow-hidden bg-champagne">
-                      <img
-                        src={product.heroImage}
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-rosegold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
-                  <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
-                    {product.name}
-                  </h3>
-                  {/* <p className="font-body text-taupe tracking-elegant">
-                    {product.price}
-                  </p> */}
-                </motion.div>
-              </Link>
-            ))}
-          </div>
+          {loadingProducts ? (
+            <div className="text-center py-12">
+              <p className="text-leather">Loading products...</p>
+            </div>
+          ) : products.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-taupe">No products found for this collection.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+              {products.map((p: any, index: number) => {
+                const uid = p.uid;
+                const name = p.data.name;
+                const imageUrl = p.data.images?.[0]?.image?.url;
+
+                return (
+                  <Link
+                    key={p.id}
+                    to={`/collections/${slug}/${uid}`}
+                    className="block group"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                    >
+                      <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
+                        <div className="aspect-square overflow-hidden bg-champagne">
+                          {imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt={name}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-taupe">
+                              No image
+                            </div>
+                          )}
+                        </div>
+                        <div className="absolute inset-0 bg-rosegold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      </div>
+
+                      <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
+                        {name}
+                      </h3>
+                    </motion.div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </section>
       </main>
 

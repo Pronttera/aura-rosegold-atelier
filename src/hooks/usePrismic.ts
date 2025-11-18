@@ -1,113 +1,91 @@
-import { useEffect, useState } from 'react';
-import { Query } from '@prismicio/client';
-import * as prismicH from '@prismicio/client';
+import { useEffect, useState } from "react";
+import { prismicClient } from "../lib/prismic";
+import * as prismic from "@prismicio/client";
 
 /**
- * Custom hook for fetching Prismic content
- * 
- * @param fetchFunction - Function that returns a Promise with Prismic data
- * @returns Object containing data, loading state, and error
+ * Generic Prismic data fetch hook
  */
 export const usePrismicData = <T,>(
-  fetchFunction: () => Promise<T>
+  fetchFunction: () => Promise<T>,
+  deps: any[] = []
 ) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
+    let active = true;
 
-    const fetchData = async () => {
+    const fetch = async () => {
       try {
         setLoading(true);
-        setError(null);
         const result = await fetchFunction();
-        
-        if (isMounted) {
-          setData(result);
-        }
+        if (active) setData(result);
       } catch (err) {
-        if (isMounted) {
-          setError(err instanceof Error ? err : new Error('An error occurred'));
+        if (active) {
+          setError(err instanceof Error ? err : new Error("Prismic error"));
         }
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (active) setLoading(false);
       }
     };
 
-    fetchData();
-
+    fetch();
     return () => {
-      isMounted = false;
+      active = false;
     };
-  }, []);
+  }, deps);
 
   return { data, loading, error };
 };
 
 /**
- * Hook for fetching all documents of a specific type
- * 
- * @param documentType - The type of document to fetch
- * @returns Object containing documents, loading state, and error
+ * Fetch all documents by type
  */
-export const usePrismicDocumentsByType = <T extends prismicH.PrismicDocument>(
+export const usePrismicDocumentsByType = <
+  T extends prismic.PrismicDocument = prismic.PrismicDocument
+>(
   documentType: string
-) => {
-  return usePrismicData<T[]>(async () => {
-    const { prismicClient } = await import('../lib/prismic');
-    return prismicClient.getAllByType(documentType) as Promise<T[]>;
-  });
-};
+) =>
+  usePrismicData<T[]>(
+    () => prismicClient.getAllByType(documentType),
+    [documentType]
+  );
 
 /**
- * Hook for fetching a single document by UID
- * 
- * @param documentType - The type of document to fetch
- * @param uid - The unique identifier of the document
- * @returns Object containing document, loading state, and error
+ * Fetch single document by UID
  */
-export const usePrismicDocumentByUID = <T extends prismicH.PrismicDocument>(
+export const usePrismicDocumentByUID = <
+  T extends prismic.PrismicDocument = prismic.PrismicDocument
+>(
   documentType: string,
   uid: string
-) => {
-  return usePrismicData<T>(async () => {
-    const { prismicClient } = await import('../lib/prismic');
-    return prismicClient.getByUID(documentType, uid) as Promise<T>;
-  });
-};
+) =>
+  usePrismicData<T>(
+    () => prismicClient.getByUID(documentType, uid),
+    [documentType, uid]
+  );
 
 /**
- * Hook for fetching a single document by ID
- * 
- * @param id - The ID of the document
- * @returns Object containing document, loading state, and error
+ * Fetch single document by ID
  */
-export const usePrismicDocumentByID = <T extends prismicH.PrismicDocument>(
+export const usePrismicDocumentByID = <
+  T extends prismic.PrismicDocument = prismic.PrismicDocument
+>(
   id: string
-) => {
-  return usePrismicData<T>(async () => {
-    const { prismicClient } = await import('../lib/prismic');
-    return prismicClient.getByID(id) as Promise<T>;
-  });
-};
+) =>
+  usePrismicData<T>(() => prismicClient.getByID(id), [id]);
 
 /**
- * Hook for querying documents with custom predicates
- * 
- * @param predicates - Prismic predicates for filtering
- * @param options - Additional query options
- * @returns Object containing query results, loading state, and error
+ * Custom Prismic query
  */
-export const usePrismicQuery = <T extends prismicH.PrismicDocument>(
-  predicates: string | string[],
-  options?: prismicH.BuildQueryURLArgs
-) => {
-  return usePrismicData<Query<T>>(async () => {
-    const { prismicClient } = await import('../lib/prismic');
-    return prismicClient.get({ predicates, ...options }) as Promise<Query<T>>;
-  });
-};
+export const usePrismicQuery = <
+  T extends prismic.PrismicDocument = prismic.PrismicDocument
+>(
+  predicates: prismic.Predicates[],
+  options?: prismic.BuildQueryURLArgs
+) =>
+  usePrismicData<prismic.Query<T>>(
+    () => prismicClient.get({ predicates, ...options }),
+    [JSON.stringify(predicates), JSON.stringify(options)]
+  );

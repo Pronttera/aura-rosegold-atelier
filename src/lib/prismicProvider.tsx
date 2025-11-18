@@ -1,23 +1,18 @@
 import { PrismicProvider as BasePrismicProvider } from '@prismicio/react';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { createClient } from './prismic';
-
-/**
- * Prismic Provider Component
- * 
- * Wraps your application to provide Prismic context to all child components.
- * This enables the use of Prismic hooks throughout your app.
- */
 
 interface PrismicProviderProps {
   children: ReactNode;
 }
 
 export const PrismicProvider = ({ children }: PrismicProviderProps) => {
-  const client = createClient();
+  const repositoryName = import.meta.env.VITE_PRISMIC_REPOSITORY_NAME;
+
+  const client = useMemo(() => createClient(), []);
 
   return (
-    <BasePrismicProvider client={client}>
+    <BasePrismicProvider client={client} repositoryName={repositoryName}>
       {children}
     </BasePrismicProvider>
   );
