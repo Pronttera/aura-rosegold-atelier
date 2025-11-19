@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar';
 import HeroCarousel from '@/components/HeroCarousel';
 import CategoryGrid from '@/components/CategoryGrid';
 import HighlightSection from '@/components/HighlightSection';
-import FeaturedCarousel from '@/components/FeaturedCarousel';
+// import FeaturedCarousel from '@/components/FeaturedCarousel';
 import Footer from '@/components/Footer';
 
 const Index = () => {
@@ -13,7 +13,7 @@ const Index = () => {
         <HeroCarousel />
         <CategoryGrid />
         <HighlightSection />
-        <FeaturedCarousel />
+        {/* <FeaturedCarousel /> */}
       </main>
       <Footer />
     </div>

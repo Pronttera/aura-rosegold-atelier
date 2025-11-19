@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import ringsImg from '@/assets/category-rings.jpg';
 import earringsImg from '@/assets/category-earrings.jpg';
 import necklacesImg from '@/assets/category-necklaces.jpg';
-import braceletsImg from '@/assets/category-bracelets.jpg';
+import pendantImg from '@/assets/signature-collection.jpg';
 
 const collections = [
   {
@@ -27,9 +27,9 @@ const collections = [
     description: 'Refined chains and pendants',
   },
   {
-    name: 'Bracelets',
-    slug: 'bracelets',
-    image: braceletsImg,
+    name: 'Pendants',
+    slug: 'pendants',
+    image: pendantImg,
     description: 'Timeless cuffs and charms',
   },
 ];

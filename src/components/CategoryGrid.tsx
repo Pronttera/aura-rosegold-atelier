@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ringsImg from '@/assets/category-rings.jpg';
 import earringsImg from '@/assets/category-earrings.jpg';
 import necklacesImg from '@/assets/category-necklaces.jpg';
-import braceletsImg from '@/assets/category-bracelets.jpg';
+import pendantImg from '@/assets/signature-collection.jpg';
 
 const categories = [
   { 
@@ -25,9 +25,9 @@ const categories = [
     description: 'Stories worn close to heart' 
   },
   { 
-    name: 'Bracelets', 
-    slug: 'bracelets',
-    image: braceletsImg, 
+    name: 'Pendants', 
+    slug: 'pendants',
+    image: pendantImg, 
     description: 'Delicate whispers of gold' 
   },
 ];
