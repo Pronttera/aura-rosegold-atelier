@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import ringsImg from '@/assets/category-rings.jpg';
 import earringsImg from '@/assets/category-earrings.jpg';
 import necklacesImg from '@/assets/category-necklaces.jpg';
-import pendantImg from '@/assets/signature-collection.jpg';
+import pendantImg from '@/assets/signature-collection.png';
 
 const collections = [
   {

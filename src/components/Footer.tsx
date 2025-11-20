@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer className="bg-taupe border-t border-rosegold/30">
       <div className="container px-6 md:px-2 py-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-4">
           {/* Brand */}
           <div>
             <img
@@ -23,9 +23,10 @@ const Footer = () => {
               Elegance in Every Curve. Handcrafted adornments in rosegold hues.
             </p>
             <div className="text-champagne text-xs space-y-1">
-              <p>Shop No.4, Konark Shopping Hub</p>
-              <p>Opp. Satyanand Hospital, Kondhwa Kurd</p>
-              <p>Near HDFC Bank, Pune, Maharashtra 411048</p>
+              <ul className="list-disc pl-4 space-y-2">
+                <li><span className='text-ivory font-bold'>Kondhwa</span> - Shop No.4, Konark Shopping Hub, Opp. Satyanand Hospital, Kondhwa Kurd, Near HDFC Bank, Pune, Maharashtra 41104</li>
+                <li><span className='text-ivory font-bold'>Hadapsar</span> - Opp, Lane Number 14/A, SayyedNagar, Hadapsar, Pune, Maharashtra 411028</li>
+              </ul>
             </div>
           </div>
 
@@ -59,14 +60,15 @@ const Footer = () => {
             </h4>
             <div className="flex gap-3 sm:gap-4 md:justify-center">
               {[
-                { icon: Instagram, label: 'Instagram' },
-                { icon: Facebook, label: 'Facebook' },
-                { icon: Twitter, label: 'Twitter' },
-              ].map(({ icon: Icon, label }) => (
+                { icon: Instagram, label: 'Instagram', url: 'https://www.instagram.com/labbaik_jewellers/' },
+                { icon: Facebook, label: 'Facebook', url: 'https://www.facebook.com/labbaikjewellers/' },
+              ].map(({ icon: Icon, label, url }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={url}
                   aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-champagne/20 hover:bg-rosegold flex items-center justify-center text-ivory transition-all duration-300 hover:shadow-hover"
                 >
                   <Icon className="w-5 h-5" />

@@ -120,7 +120,7 @@ const ProductDetail = () => {
                     key={currentImage}
                     src={images[currentImage]}
                     alt={productName}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -157,7 +157,7 @@ const ProductDetail = () => {
                   <button
                     key={i}
                     onClick={() => setCurrentImage(i)}
-                    className={`w-16 h-16 rounded-md overflow-hidden border-2 ${
+                    className={`w-20 h-20 rounded-md overflow-hidden border-2 ${
                       currentImage === i ? "border-rosegold" : "border-transparent"
                     }`}
                   >

@@ -126,13 +126,24 @@ const CollectionDetail = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {products.map((p: any, index: number) => {
                 const uid = p.uid;
-                const name = p.data.name;
-                const imageUrl = p.data.images?.[0]?.image?.url;
+                const name = p.data.name ? (p.data.name) : 'Unnamed Product';
+                const imageUrl = p.data.images?.[0]?.image?.url || '';
+                const productCategory = slug;
 
                 return (
                   <Link
                     key={p.id}
                     to={`/collections/${slug}/${uid}`}
+                    state={{
+                      productData: {
+                        ...p.data,
+                        uid: p.uid,  // Make sure to include the uid
+                        category: {
+                          id: collection?.id,  // The collection ID for related products
+                          slug: slug           // The collection slug for navigation
+                        }
+                      }
+                    }}
                     className="block group"
                   >
                     <motion.div

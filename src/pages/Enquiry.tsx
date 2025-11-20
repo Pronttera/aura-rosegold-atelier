@@ -162,6 +162,8 @@ const Enquiry = () => {
                 onBlur={formik.handleBlur}
                 className="bg-champagne/30"
                 placeholder="+91 98765 43210"
+                pattern="[0-9]{10}"
+                maxLength={10}
               />
               {formik.touched.phone && formik.errors.phone && (
                 <p className="text-red-500 text-sm mt-1">{formik.errors.phone}</p>
@@ -197,11 +199,10 @@ const Enquiry = () => {
                     setIsDragging(true);
                   }}
                   onDragLeave={() => setIsDragging(false)}
-                  className={`relative block border-2 border-dashed rounded-lg p-8 cursor-pointer transition ${
-                    isDragging
+                  className={`relative block border-2 border-dashed rounded-lg p-8 cursor-pointer transition ${isDragging
                       ? "border-rosegold bg-mauve/20"
                       : "border-taupe/40 bg-champagne/20"
-                  }`}
+                    }`}
                 >
                   <input
                     type="file"

@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import signatureImg from '@/assets/signature-collection.jpg';
-import hero1 from '@/assets/hero-1.jpg';
+import shopImg from '@/assets/shop.png';
+import hero4 from '@/assets/hero-4.png';
 import { Link } from 'react-router-dom';
 
 const About = () => {
@@ -35,7 +35,7 @@ const About = () => {
           >
             <div className="aspect-[16/9]">
               <img
-                src={hero1}
+                src={hero4}
                 alt="Labbaik Atelier"
                 className="w-full h-full object-cover"
               />
@@ -74,11 +74,11 @@ const About = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="relative rounded-lg overflow-hidden shadow-soft"
             >
-              <div className="aspect-[4/5]">
+              <div>
                 <img
-                  src={signatureImg}
+                  src={shopImg}
                   alt="Craftsmanship"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
             </motion.div>
