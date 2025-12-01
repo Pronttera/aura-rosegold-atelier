@@ -135,15 +135,17 @@ const ProductDetail = () => {
             <div className="relative">
               <div className="relative aspect-square overflow-hidden rounded-lg mb-4">
                 <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentImage}
-                    src={images[currentImage]}
-                    alt={productName}
-                    className="w-full h-full object-cover"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  />
+                  <motion.div className="relative w-full h-full">
+                    <motion.img
+                      key={currentImage}
+                      src={images[currentImage]}
+                      alt={productName}
+                      className="w-full h-full object-cover"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    />
+                  </motion.div>
                 </AnimatePresence>
 
                 {/* Slider Arrows */}
@@ -180,13 +182,15 @@ const ProductDetail = () => {
                   <button
                     key={i}
                     onClick={() => setCurrentImage(i)}
-                    className={`w-20 h-20 rounded-md overflow-hidden border-2 ${
-                      currentImage === i
+                    className={`w-20 h-20 rounded-md overflow-hidden border-2 relative ${currentImage === i
                         ? "border-rosegold"
                         : "border-transparent"
-                    }`}
+                      }`}
                   >
-                    <img src={img} className="w-full h-full object-cover" />
+                    <img
+                      src={img}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -241,17 +245,28 @@ const ProductDetail = () => {
               )}
 
               {/* WhatsApp CTA */}
-              <Button
-                onClick={() => {
-                  const msg = encodeURIComponent(
-                    `Hello, I’m interested in the ${productName}. Please share more details.`
-                  );
-                  window.open(`https://wa.me/9834174885?text=${msg}`, "_blank");
-                }}
-                className="w-full bg-gradient-to-r from-rosegold to-mauve text-ivory rounded-full py-6 text-lg"
-              >
-                Send Enquiry on WhatsApp
-              </Button>
+              <div className="space-y-4">
+                {product.out_of_stock && (
+                  <div className="bg-ivory/90 border border-rosegold/20 p-4 rounded-lg text-center">
+                    <p className="text-taupe">
+                      This item is currently out of stock, but we can help you get it!
+                      Contact us for availability and delivery time.
+                    </p>
+                  </div>
+                )}
+
+                <Button
+                  onClick={() => {
+                    const msg = encodeURIComponent(
+                      `Hello, I'm interested in the ${productName}. Please share more details.`
+                    );
+                    window.open(`https://wa.me/9834174885?text=${msg}`, "_blank");
+                  }}
+                  className="w-full bg-gradient-to-r from-rosegold to-mauve text-ivory rounded-full py-6 text-lg"
+                >
+                  Send Enquiry on WhatsApp
+                </Button>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -298,23 +313,36 @@ const ProductDetail = () => {
                             }}
                           >
                             <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
-                              <div className="aspect-square overflow-hidden bg-champagne">
-                                {imageUrl ? (
-                                  <img
-                                    src={imageUrl}
-                                    alt={item.data.name || "Product"}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                                    <span className="text-taupe">
-                                      No image available
-                                    </span>
-                                  </div>
-                                )}
+
+                          {/* IMAGE */}
+                          <div
+                            className={`aspect-square overflow-hidden bg-champagne ${item.data.out_of_stock ? "opacity-60 grayscale" : ""
+                              }`}
+                          >
+                            {imageUrl ? (
+                              <img
+                                src={imageUrl}
+                                alt={item.data.name}
+                                className={`w-full h-full object-cover transition-transform duration-700 ${item.data.out_of_stock ? "" : "group-hover:scale-110"
+                                  }`}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-taupe">
+                                No image
                               </div>
-                              <div className="absolute inset-0 bg-rosegold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            )}
+                          </div>
+
+                          {/* OUT OF STOCK OVERLAY */}
+                          {item.data.out_of_stock && (
+                            <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                              <span className="text-ivory font-serif text-xl tracking-wide">
+                                Out of Stock
+                              </span>
                             </div>
+                          )}
+
+                        </div>
                             <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
                               {item.data.name || "Unnamed Product"}
                             </h3>

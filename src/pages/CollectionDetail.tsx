@@ -158,12 +158,18 @@ const CollectionDetail = () => {
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
                         <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
-                          <div className="aspect-square overflow-hidden bg-champagne">
+
+                          {/* IMAGE */}
+                          <div
+                            className={`aspect-square overflow-hidden bg-champagne ${p.data.out_of_stock ? "opacity-60 grayscale" : ""
+                              }`}
+                          >
                             {imageUrl ? (
                               <img
                                 src={imageUrl}
                                 alt={name}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                className={`w-full h-full object-cover transition-transform duration-700 ${p.data.out_of_stock ? "" : "group-hover:scale-110"
+                                  }`}
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-taupe">
@@ -171,8 +177,18 @@ const CollectionDetail = () => {
                               </div>
                             )}
                           </div>
-                          <div className="absolute inset-0 bg-rosegold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                          {/* OUT OF STOCK OVERLAY */}
+                          {p.data.out_of_stock && (
+                            <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                              <span className="text-ivory font-serif text-xl tracking-wide">
+                                Out of Stock
+                              </span>
+                            </div>
+                          )}
+
                         </div>
+
 
                         <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
                           {name}
