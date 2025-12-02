@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Heart, Share2, ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, Heart, Share2, ChevronLeft, ChevronRight, ShoppingBag, X, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -40,6 +40,10 @@ const ProductDetail = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isFavorite, setIsFavorite] = useState(false);
     const [quantity, setQuantity] = useState(1);
+    const [isZoomed, setIsZoomed] = useState(false);
+    const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
+    const [showZoomModal, setShowZoomModal] = useState(false);
+    const imageContainerRef = useRef<HTMLDivElement>(null);
 
     // Find the product data
     const product = slug && productId
@@ -91,6 +95,29 @@ const ProductDetail = () => {
         }
     };
 
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!imageContainerRef.current) return;
+        
+        const rect = imageContainerRef.current.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        setZoomPosition({ x, y });
+    };
+
+    const handleMouseEnter = () => {
+        setIsZoomed(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsZoomed(false);
+        setZoomPosition({ x: 50, y: 50 });
+    };
+
+    const handleImageClick = () => {
+        setShowZoomModal(true);
+    };
+
     // Mock related products - in a real app, this would be filtered by category or tags
     const relatedProducts = product
         ? getAllProducts()
@@ -125,19 +152,38 @@ const ProductDetail = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         {/* Product Images */}
                         <div className="relative">
-                            <div className="relative aspect-square overflow-hidden rounded-lg bg-champagne mb-4">
+                            <div 
+                                ref={imageContainerRef}
+                                className="relative aspect-square overflow-hidden rounded-lg bg-champagne mb-4 cursor-zoom-in"
+                                onMouseMove={handleMouseMove}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
+                                onClick={handleImageClick}
+                            >
                                 <AnimatePresence mode="wait">
                                     <motion.img
                                         key={currentImageIndex}
                                         src={product.images[currentImageIndex]}
                                         alt={`${product.name} - ${currentImageIndex + 1}`}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover transition-transform duration-200 ease-out"
+                                        style={{
+                                            transform: isZoomed ? 'scale(2.5)' : 'scale(1)',
+                                            transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                                        }}
                                         initial={{ opacity: 0, scale: 0.98 }}
-                                        animate={{ opacity: 1, scale: 1 }}
+                                        animate={{ opacity: 1, scale: isZoomed ? 2.5 : 1 }}
                                         exit={{ opacity: 0, scale: 1.02 }}
                                         transition={{ duration: 0.3 }}
                                     />
                                 </AnimatePresence>
+                                
+                                {/* Zoom Indicator */}
+                                {!isZoomed && (
+                                    <div className="absolute top-4 right-4 bg-black/60 text-white px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5 pointer-events-none backdrop-blur-sm">
+                                        <ZoomIn className="w-3.5 h-3.5" />
+                                        <span className="font-medium">Hover to zoom</span>
+                                    </div>
+                                )}
 
                                 {/* Navigation Arrows */}
                                 {product.images.length > 1 && (
@@ -297,6 +343,72 @@ const ProductDetail = () => {
             </main>
 
             <Footer />
+            
+            {/* Full Screen Zoom Modal */}
+            <AnimatePresence>
+                {showZoomModal && (
+                    <motion.div
+                        className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowZoomModal(false)}
+                    >
+                        {/* Close Button */}
+                        <button
+                            className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors z-10 bg-black/30 hover:bg-black/50 rounded-full p-2"
+                            onClick={() => setShowZoomModal(false)}
+                            aria-label="Close"
+                        >
+                            <X className="w-8 h-8" />
+                        </button>
+                        
+                        <div className="relative max-w-7xl max-h-[95vh] w-full h-full flex items-center justify-center p-4">
+                            <motion.img
+                                src={product.images[currentImageIndex]}
+                                alt={`${product.name} - Enlarged view`}
+                                className="max-w-full max-h-full object-contain"
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                transition={{ duration: 0.3 }}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                            
+                            {/* Navigation Arrows in Modal */}
+                            {product.images.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handlePrevImage();
+                                        }}
+                                        className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-4 rounded-full transition-all shadow-lg"
+                                        aria-label="Previous image"
+                                    >
+                                        <ChevronLeft className="w-6 h-6" />
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleNextImage();
+                                        }}
+                                        className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-4 rounded-full transition-all shadow-lg"
+                                        aria-label="Next image"
+                                    >
+                                        <ChevronRight className="w-6 h-6" />
+                                    </button>
+                                </>
+                            )}
+                            
+                            {/* Image Counter */}
+                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm text-white px-5 py-2.5 rounded-full text-sm font-medium">
+                                {currentImageIndex + 1} / {product.images.length}
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

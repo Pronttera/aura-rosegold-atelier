@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogOut, Mail, Phone, User, Calendar, Image as ImageIcon, Loader2, Package, CheckCircle, Circle, ChevronLeft, ChevronRight, Search, Filter } from 'lucide-react';
+import { LogOut, Mail, Phone, User, Calendar, Image as ImageIcon, Loader2, Package, CheckCircle, Circle, ChevronLeft, ChevronRight, Search, Filter, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
@@ -427,18 +427,24 @@ const AdminDashboard = () => {
                       {enquiry.reference_image_url ? (
                         <div>
                           <p className="text-sm font-medium text-leather mb-2">Reference Image:</p>
-                          <a
-                            href={enquiry.reference_image_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="block"
-                          >
+                          <div className="relative group">
                             <img
                               src={enquiry.reference_image_url}
                               alt="Reference"
-                              className="w-full h-32 object-cover rounded-lg border border-champagne/50 hover:opacity-80 transition-opacity"
+                              className="w-full h-32 object-cover rounded-lg border border-champagne/50 transition-all"
                             />
-                          </a>
+                            {/* Hover Overlay */}
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                              <Button
+                                onClick={() => window.open(enquiry.reference_image_url!, '_blank')}
+                                className="bg-white/90 hover:bg-white text-leather flex items-center gap-2"
+                                size="sm"
+                              >
+                                <Eye className="w-4 h-4" />
+                                View Image
+                              </Button>
+                            </div>
+                          </div>
                         </div>
                       ) : (
                         <div className="flex items-center justify-center h-32 bg-champagne/30 rounded-lg">

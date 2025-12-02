@@ -102,7 +102,6 @@ const AdminLogin = () => {
             <ShieldCheck className="w-8 h-8 text-ivory" />
           </motion.div>
           <h1 className="text-3xl font-serif text-leather mb-2">Admin Portal</h1>
-          <p className="text-taupe">Aura Rose Gold Atelier</p>
         </div>
 
         {/* Login Form */}
