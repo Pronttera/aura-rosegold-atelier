@@ -283,10 +283,30 @@ const ProductDetail = () => {
 
                 <Button
                   onClick={() => {
-                    const msg = encodeURIComponent(
-                      `Hello, I'm interested in the ${productName}. Please share more details.`
-                    );
-                    window.open(`https://wa.me/9834174885?text=${msg}`, "_blank");
+                    // Build concise WhatsApp message
+                    let message = `Hello, I'm interested in the *${productName}*`;
+                    
+                    // Add category if available
+                    if (category?.category_type) {
+                      message += ` from your ${asText(category.category_type)} collection`;
+                    }
+                    
+                    message += `.\n\n`;
+                    
+                    // Add design type if available
+                    if (designTypeName) {
+                      message += `Design: ${designTypeName}\n`;
+                    }
+                    
+                    // Add stock status if out of stock
+                    if (product.out_of_stock) {
+                      message += `\nNote: I understand this is currently out of stock.\n`;
+                    }
+                    
+                    message += `\nPlease share pricing and availability details.\n\nThank you.`;
+                    
+                    const encodedMsg = encodeURIComponent(message);
+                    window.open(`https://wa.me/9834174885?text=${encodedMsg}`, "_blank");
                   }}
                   className="w-full bg-gradient-to-r from-rosegold to-mauve text-ivory rounded-full py-6 text-lg"
                 >
