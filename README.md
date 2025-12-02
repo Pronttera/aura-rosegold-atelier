@@ -59,6 +59,41 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase (Database & Storage)
+- Prismic CMS
+
+## Environment Setup
+
+This project uses Supabase for database and storage, and Prismic for content management. You'll need to set up environment variables before running the project.
+
+### Required Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Supabase Configuration
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Prismic CMS Configuration
+VITE_PRISMIC_REPOSITORY_NAME=your_prismic_repository_name
+VITE_PRISMIC_ACCESS_TOKEN=your_prismic_access_token
+VITE_PRISMIC_ENDPOINT=your_prismic_endpoint
+```
+
+### Supabase Setup
+
+For detailed instructions on setting up Supabase for this project, see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md).
+
+Quick setup:
+1. Create a Supabase project at https://supabase.com
+2. Create the `custom_jewellery_enquiries` table (SQL provided in SUPABASE_SETUP.md)
+3. Create the `enquiry-images` storage bucket
+4. Add your Supabase credentials to `.env`
+
+### Prismic CMS Setup
+
+For detailed instructions on setting up Prismic CMS, see [PRISMIC_SETUP.md](./PRISMIC_SETUP.md).
 
 ## How can I deploy this project?
 
