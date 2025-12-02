@@ -19,6 +19,7 @@ export interface CustomJewelleryEnquiry {
   phone: string;
   design_details: string;
   reference_image_url?: string | null;
+  is_read?: boolean;
   created_at?: string;
 }
 
@@ -84,13 +85,63 @@ export const submitEnquiry = async (enquiry: CustomJewelleryEnquiry) => {
 };
 
 /**
+ * Mark an enquiry as read
+ * @param enquiryId - The ID of the enquiry to mark as read
+ * @returns The updated enquiry record
+ */
+export const markEnquiryAsRead = async (enquiryId: string): Promise<CustomJewelleryEnquiry> => {
+  try {
+    const { data, error } = await supabase
+      .from('custom_jewellery_enquiries')
+      .update({ is_read: true })
+      .eq('id', enquiryId)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error marking enquiry as read:', error);
+    throw new Error('Failed to mark enquiry as read');
+  }
+};
+
+/**
+ * Mark an enquiry as unread
+ * @param enquiryId - The ID of the enquiry to mark as unread
+ * @returns The updated enquiry record
+ */
+export const markEnquiryAsUnread = async (enquiryId: string): Promise<CustomJewelleryEnquiry> => {
+  try {
+    const { data, error } = await supabase
+      .from('custom_jewellery_enquiries')
+      .update({ is_read: false })
+      .eq('id', enquiryId)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error marking enquiry as unread:', error);
+    throw new Error('Failed to mark enquiry as unread');
+  }
+};
+
+/**
  * Submit enquiry with image upload
  * @param enquiry - The enquiry data without image URL
  * @param imageFile - Optional image file to upload
  * @returns The created enquiry record
  */
 export const submitEnquiryWithImage = async (
-  enquiry: Omit<CustomJewelleryEnquiry, 'reference_image_url'>,
+  enquiry: Omit<CustomJewelleryEnquiry, 'reference_image_url' | 'is_read'>,
   imageFile?: File | null
 ): Promise<CustomJewelleryEnquiry> => {
   try {
