@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Upload, X } from 'lucide-react';
+import { MessageSquare, Upload, X, Loader2 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -8,13 +8,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
+import { submitEnquiryWithImage } from '@/lib/supabase';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 const Enquiry = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Yup Validation Schema
   const validationSchema = Yup.object({
@@ -35,23 +38,51 @@ const Enquiry = () => {
       message: "",
     },
     validationSchema,
-    onSubmit: () => {
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
 
-      // 💬 Show success notification instead of WhatsApp redirect
-      toast({
-        title: "Enquiry Submitted",
-        description: "Thank you! We have received your enquiry and will contact you soon.",
-      });
+      try {
+        // Submit enquiry with image to Supabase
+        await submitEnquiryWithImage(
+          {
+            full_name: values.name,
+            email: values.email,
+            phone: values.phone,
+            design_details: values.message,
+          },
+          uploadedFile
+        );
 
-      // Reset form
-      formik.resetForm();
-      setUploadedImage(null);
+        // Show success notification
+        toast({
+          title: "Enquiry Submitted Successfully! ✨",
+          description: "Thank you! We have received your enquiry and will contact you soon.",
+        });
+
+        // Reset form
+        formik.resetForm();
+        setUploadedImage(null);
+        setUploadedFile(null);
+      } catch (error) {
+        console.error('Error submitting enquiry:', error);
+        toast({
+          title: "Submission Failed",
+          description: "There was an error submitting your enquiry. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     },
   });
 
   // Image upload handling
   const handleImageUpload = (file: File) => {
     if (file && file.type.startsWith("image/")) {
+      // Store the actual file for upload
+      setUploadedFile(file);
+      
+      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => setUploadedImage(reader.result as string);
       reader.readAsDataURL(file);
@@ -220,10 +251,13 @@ const Enquiry = () => {
                 <div className="relative p-4 bg-champagne/30 rounded-lg">
                   <button
                     type="button"
-                    onClick={() => setUploadedImage(null)}
-                    className="absolute top-2 right-2 bg-leather/80 text-ivory p-2 rounded-full"
+                    onClick={() => {
+                      setUploadedImage(null);
+                      setUploadedFile(null);
+                    }}
+                    className="absolute top-2 right-2 bg-leather/80 text-ivory p-2 rounded-full hover:bg-leather transition"
                   >
-                    <X />
+                    <X className="w-4 h-4" />
                   </button>
                   <img src={uploadedImage} className="w-full rounded-md" alt="uploaded" />
                 </div>
@@ -234,10 +268,20 @@ const Enquiry = () => {
             <motion.div custom={5} initial="hidden" whileInView="visible" variants={fadeUpVariants}>
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-rosegold to-mauve text-ivory py-5"
+                disabled={isSubmitting}
+                className="w-full bg-gradient-to-r from-rosegold to-mauve text-ivory py-5 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <MessageSquare className="mr-2" />
-                Submit Enquiry
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare className="mr-2" />
+                    Submit Enquiry
+                  </>
+                )}
               </Button>
             </motion.div>
 
