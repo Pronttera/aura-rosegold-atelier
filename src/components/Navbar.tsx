@@ -74,7 +74,7 @@ const Navbar = () => {
                     : 'text-leather'
                   }
   ${location.pathname === '/'
-                    ? 'hover:text-ivory'
+                    ? (isScrolled ? 'hover:text-rosegold' : 'hover:text-ivory')
                     : 'hover:text-rosegold'
                   }
 `}
