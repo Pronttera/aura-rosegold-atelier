@@ -154,6 +154,9 @@ const Contact = () => {
                         id="phone"
                         name="phone"
                         type="tel"
+                        inputMode="numeric"
+                        pattern="[0-9]{10}"
+                        maxLength={10}
                         className={`bg-champagne border-taupe focus:border-rosegold focus:ring-rosegold ${errors.phone && touched.phone ? 'border-red-500' : ''
                           }`}
                       />
@@ -204,10 +207,17 @@ const Contact = () => {
                       <MapPin className="w-5 h-5 text-rosegold" />
                     </div>
                     <div>
-                      <h4 className="font-serif text-base sm:text-lg text-leather mb-1 tracking-elegant">Our Location</h4>
-                      <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">Shop No.4, Konark Shopping Hub</p>
-                      <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">Opp. Satyanand Hospital, Kondhwa Kurd</p>
-                      <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">Near HDFC Bank, Pune, Maharashtra 411048</p>
+                      <h4 className="font-serif text-base sm:text-lg text-leather mb-1 tracking-elegant">Our Locations</h4>
+                      <div className="space-y-2">
+                        <ul className='list-disc pl-4 space-y-2'>
+                          <li className="font-body text-sm sm:text-base text-taupe tracking-elegant">
+                            Kondhwa - Shop No.4, Konark Shopping Hub, Opp. Satyanand Hospital, Kondhwa Kurd, Near HDFC Bank, Pune, Maharashtra 41104
+                          </li>
+                          <li className="font-body text-sm sm:text-base text-taupe tracking-elegant">
+                            Hadapsar - Opp, Lane Number 14/A, SayyedNagar, Hadapsar, Pune, Maharashtra 411028
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
 
@@ -220,7 +230,7 @@ const Contact = () => {
                         Phone
                       </h3>
                       <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">
-                        +91 9876543210
+                        +91 9028474689
                       </p>
                     </div>
                   </div>
@@ -234,7 +244,7 @@ const Contact = () => {
                         Email
                       </h3>
                       <p className="font-body text-sm sm:text-base text-taupe tracking-elegant">
-                        hello@labbaikjewelry.com
+                        jewellerslabbaik@gmail.com
                       </p>
                     </div>
                   </div>
@@ -246,9 +256,7 @@ const Contact = () => {
                   Working Hours
                 </h3>
                 <div className="space-y-2 font-body text-sm sm:text-base text-taupe tracking-elegant">
-                  <p>Monday - Friday: 10am - 6pm</p>
-                  <p>Saturday: 11am - 5pm</p>
-                  <p>Sunday: Closed</p>
+                  <p>Everyday: 11am - 7pm</p>
                 </div>
               </div>
             </motion.div>

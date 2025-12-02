@@ -19,7 +19,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 600);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -37,17 +37,19 @@ const Navbar = () => {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-ivory shadow-soft' : 'bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${location.pathname === '/'
+        ? (isScrolled ? 'bg-ivory/90 backdrop-blur-md shadow-soft' : 'bg-ivory/25 backdrop-blur-md')
+        : 'bg-ivory/90 backdrop-blur-md shadow-soft'
         }`}
     >
-      <div className="container mx-auto px-4 sm:px-6">
+      <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/">
             <img
               src={logo}
               alt="Labbaik Logo"
-              className="w-56 h-auto"
+              className="w-48 h-auto"
             />
           </Link>
 
@@ -63,8 +65,21 @@ const Navbar = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`text-leather hover:text-rosegold transition-colors elegant-underline pb-1 ${location.pathname === item.path ? 'text-rosegold' : ''
-                  }`}
+                className={`
+  pb-1 transition-colors elegant-underline
+  ${location.pathname === item.path
+                    ? location.pathname === '/'
+                      ? (isScrolled ? 'text-rosegold' : 'text-ivory')
+                      : 'text-rosegold'
+                    : 'text-leather'
+                  }
+  ${location.pathname === '/'
+                    ? 'hover:text-ivory'
+                    : 'hover:text-rosegold'
+                  }
+`}
+
+
               >
                 {item.name}
               </Link>
@@ -86,15 +101,20 @@ const Navbar = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-leather hover:text-rosegold h-11 w-11"
+                className="text-leather hover:text-rosegold"
               >
-                <Menu className="h-6 w-6" />
+                <Menu />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-ivory border-taupe w-full sm:w-[320px]">
+            <SheetContent side="right" className="bg-ivory border-taupe w-full [&>button>svg]:h-8 [&>button>svg]:w-8">
               <SheetHeader>
                 <SheetTitle className="font-serif text-2xl tracking-widest text-leather">
-                  Labbaik
+                  {/* Labbaik */}
+                  <img
+                    src={logo}
+                    alt="Labbaik Logo"
+                    className="w-56 h-auto mx-auto"
+                  />
                 </SheetTitle>
               </SheetHeader>
               <nav className="flex flex-col gap-6 mt-8">

@@ -15,7 +15,7 @@ All colors MUST be HSL.
     --taupe: 23 28% 67%;
     --mauve: 14 31% 77%;
     --leather: 12 16% 40%;
-    
+
     --background: var(--ivory);
     --foreground: var(--leather);
 
@@ -54,11 +54,11 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: var(--leather);
     --sidebar-border: var(--taupe);
     --sidebar-ring: var(--rosegold);
-    
+
     /* Shadows with mauve tint */
     --shadow-soft: 0 4px 20px -4px hsl(var(--mauve) / 0.2);
     --shadow-hover: 0 8px 30px -6px hsl(var(--rosegold) / 0.3);
-    
+
     /* Smooth transitions */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -94,8 +94,13 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground font-body antialiased;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif tracking-wide;
   }
 }
@@ -104,24 +109,24 @@ All colors MUST be HSL.
   .text-gradient-rosegold {
     @apply bg-gradient-to-r from-rosegold to-mauve bg-clip-text text-transparent;
   }
-  
+
   .shadow-soft {
     box-shadow: var(--shadow-soft);
   }
-  
+
   .shadow-hover {
     box-shadow: var(--shadow-hover);
   }
-  
+
   .transition-smooth {
     transition: var(--transition-smooth);
   }
-  
+
   .hover-zoom {
     @apply transition-smooth hover:scale-[1.03];
   }
-  
+
   .elegant-underline {
-    @apply relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 after:bg-rosegold after:transition-all after:duration-300 hover:after:w-full;
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full;
   }
 }

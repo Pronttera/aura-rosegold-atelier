@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import signatureImg from '@/assets/signature-collection.jpg';
+import signatureImg from '@/assets/signature-collection-2.png';
+import { Link } from 'react-router-dom';
 
 const HighlightSection = () => {
   return (
@@ -40,7 +41,7 @@ const HighlightSection = () => {
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="h-px bg-rosegold mb-6"
               />
-              
+
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-light text-leather mb-3 sm:mb-4 tracking-wide">
                 The Signature Collection
               </h2>
@@ -77,12 +78,12 @@ const HighlightSection = () => {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="pt-4"
             >
-              <a
-                href="#featured"
+              <Link
+                to="/collections"
                 className="inline-block text-rosegold font-body tracking-elegant hover:text-leather transition-colors elegant-underline pb-1"
               >
                 Discover the Collection →
-              </a>
+              </Link>
             </motion.div>
           </motion.div>
         </div>

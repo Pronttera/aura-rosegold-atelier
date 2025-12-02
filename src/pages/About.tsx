@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import signatureImg from '@/assets/signature-collection.jpg';
-import hero1 from '@/assets/hero-1.jpg';
+import shopImg from '@/assets/shop.png';
+import hero4 from '@/assets/hero-4.png';
 import { Link } from 'react-router-dom';
 
 const About = () => {
@@ -10,7 +10,7 @@ const About = () => {
     <div className="min-h-screen bg-ivory">
       <Navbar />
       
-      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
+      <main className="pt-28 pb-16">
         {/* Hero Section */}
         <section className="container mx-auto px-4 sm:px-6 mb-12 sm:mb-16 md:mb-20">
           <motion.div
@@ -19,8 +19,8 @@ const About = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-10 sm:mb-12 md:mb-16"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif text-leather mb-4 sm:mb-6 tracking-wide font-bold">
-              About Labbaik
+            <h1 className="text-3xl md:text-6xl font-serif text-leather mb-4 tracking-wide font-bold">
+              About Labbaik Jewellers
             </h1>
             <p className="font-body text-base sm:text-lg md:text-xl text-taupe max-w-3xl mx-auto tracking-elegant leading-relaxed px-4">
               Heritage Rooted in Pune, Crafted for the World
@@ -35,7 +35,7 @@ const About = () => {
           >
             <div className="aspect-[16/9]">
               <img
-                src={hero1}
+                src={hero4}
                 alt="Labbaik Atelier"
                 className="w-full h-full object-cover"
               />
@@ -74,11 +74,11 @@ const About = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="relative rounded-lg overflow-hidden shadow-soft"
             >
-              <div className="aspect-[4/5]">
+              <div>
                 <img
-                  src={signatureImg}
+                  src={shopImg}
                   alt="Craftsmanship"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
             </motion.div>

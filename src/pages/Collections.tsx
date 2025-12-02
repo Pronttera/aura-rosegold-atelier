@@ -2,43 +2,15 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import ringsImg from '@/assets/category-rings.jpg';
-import earringsImg from '@/assets/category-earrings.jpg';
-import necklacesImg from '@/assets/category-necklaces.jpg';
-import braceletsImg from '@/assets/category-bracelets.jpg';
-
-const collections = [
-  {
-    name: 'Rings',
-    slug: 'rings',
-    image: ringsImg,
-    description: 'Delicate bands and statement pieces',
-  },
-  {
-    name: 'Earrings',
-    slug: 'earrings',
-    image: earringsImg,
-    description: 'Graceful drops and elegant studs',
-  },
-  {
-    name: 'Necklaces',
-    slug: 'necklaces',
-    image: necklacesImg,
-    description: 'Refined chains and pendants',
-  },
-  {
-    name: 'Bracelets',
-    slug: 'bracelets',
-    image: braceletsImg,
-    description: 'Timeless cuffs and charms',
-  },
-];
+import { useCollections } from '@/hooks/useCollections';
 
 const Collections = () => {
+  const { collections, loading, error } = useCollections();
+
   return (
     <div className="min-h-screen bg-ivory">
       <Navbar />
-      
+
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
         {/* Hero Section */}
         <section className="container mx-auto px-4 sm:px-6 mb-12 sm:mb-16">

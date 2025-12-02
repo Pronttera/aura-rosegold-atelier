@@ -1,416 +1,365 @@
-import { useState, useEffect, useRef } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Heart, Share2, ChevronLeft, ChevronRight, ShoppingBag, X, ZoomIn } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { findProduct, getAllProducts, Product } from '@/data/products';
-import product1 from '@/assets/product-1.jpg';
-import product2 from '@/assets/product-2.jpg';
-import product3 from '@/assets/product-3.jpg';
-import product4 from '@/assets/product-4.jpg';
-
-// Mock data - In a real app, this would come from an API
-const productsData = {
-    rings: [
-        {
-            id: 1,
-            name: 'Ethereal Band',
-            price: '$285',
-            description: 'A delicate band featuring a subtle rosegold finish, perfect for everyday elegance. Handcrafted with attention to detail, this piece embodies understated luxury.',
-            category: 'Rings',
-            images: [product1, product2, product3, product4],
-            details: [
-                '18K Rosegold',
-                '2mm width',
-                'Handcrafted',
-                'Nickel-free',
-                'Hypoallergenic'
-            ]
-        },
-        // More products...
-    ],
-    // Other categories...
-} as const;
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { prismicClient } from "@/lib/prismic";
+import { asText } from "@prismicio/client";
+import useProducts from "@/hooks/useProducts";
 
 const ProductDetail = () => {
-    const { slug, productId } = useParams<{ slug: string; productId: string }>();
-    const navigate = useNavigate();
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [isFavorite, setIsFavorite] = useState(false);
-    const [quantity, setQuantity] = useState(1);
-    const [isZoomed, setIsZoomed] = useState(false);
-    const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
-    const [showZoomModal, setShowZoomModal] = useState(false);
-    const imageContainerRef = useRef<HTMLDivElement>(null);
+  const { slug, productUid } = useParams<{
+    slug: string;
+    productUid: string;
+  }>();
+  const navigate = useNavigate();
 
-    // Find the product data
-    const product = slug && productId
-        ? findProduct(slug, parseInt(productId, 10))
-        : null;
+  const [product, setProduct] = useState<any>(null);
+  const [category, setCategory] = useState<any>(null);
 
-    // If product not found, redirect to collections
-    useEffect(() => {
-        if (!product && slug) {
-            navigate(`/collections/${slug}`);
+  const [loading, setLoading] = useState(true);
+  const [currentImage, setCurrentImage] = useState(0);
+
+  // Inside your ProductDetails component, after the existing state
+  const { products: relatedProducts, loading: relatedProductsLoading } =
+    useProducts(product?.category?.id);
+
+  //
+  // FETCH PRODUCT + CATEGORY
+  //
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!productUid) return;
+
+        // Fetch product
+        const productDoc = await prismicClient.getByUID(
+          "product_details",
+          productUid,
+          {
+            fetchLinks: ["design_type.design_name"], // <-- fetch linked fields
+          }
+        );
+
+        if (!productDoc) {
+          navigate(`/collections/${slug}`);
+          return;
         }
-    }, [product, slug, navigate]);
 
-    if (!product) {
-        return (
-            <div className="min-h-screen bg-ivory">
-                <Navbar />
-                <div className="container mx-auto px-6 pt-32 pb-16 text-center">
-                    <h1 className="text-4xl font-serif text-leather mb-4">Product Not Found</h1>
-                    <Link to="/collections" className="text-rosegold hover:underline font-body">
-                        Return to Collections
-                    </Link>
-                </div>
-                <Footer />
-            </div>
-        );
-    }
+        setProduct(productDoc.data);
 
-    const handlePrevImage = () => {
-        setCurrentImageIndex(prev =>
-            prev === 0 ? product.images.length - 1 : prev - 1
-        );
-    };
-
-    const handleNextImage = () => {
-        setCurrentImageIndex(prev =>
-            prev === product.images.length - 1 ? 0 : prev + 1
-        );
-    };
-
-    const handleThumbnailClick = (index: number) => {
-        setCurrentImageIndex(index);
-    };
-
-    const handleQuantityChange = (value: number) => {
-        const newQuantity = quantity + value;
-        if (newQuantity >= 1 && newQuantity <= 10) {
-            setQuantity(newQuantity);
+        // Fetch linked "product_type" category
+        const categoryId = productDoc.data?.category?.id;
+        if (categoryId) {
+          const categoryDoc = await prismicClient.getByID(categoryId);
+          setCategory(categoryDoc?.data || null);
         }
+      } catch (err) {
+        console.error("Product load error:", err);
+        navigate(`/collections/${slug}`);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!imageContainerRef.current) return;
-        
-        const rect = imageContainerRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        
-        setZoomPosition({ x, y });
-    };
+    fetchData();
+  }, [productUid, slug, navigate]);
 
-    const handleMouseEnter = () => {
-        setIsZoomed(true);
-    };
-
-    const handleMouseLeave = () => {
-        setIsZoomed(false);
-        setZoomPosition({ x: 50, y: 50 });
-    };
-
-    const handleImageClick = () => {
-        setShowZoomModal(true);
-    };
-
-    // Mock related products - in a real app, this would be filtered by category or tags
-    const relatedProducts = product
-        ? getAllProducts()
-            .filter(p => p.id !== product.id && p.category === product.category)
-            .slice(0, 3)
-            .map(p => ({
-                id: p.id,
-                name: p.name,
-                // price: p.price,
-                image: p.images[0]
-            }))
-        : [];
-
+  //
+  // LOADING STATE
+  //
+  if (loading) {
     return (
-        <div className="min-h-screen bg-ivory">
-            <Navbar />
-
-            <main className="pt-24 pb-16">
-                {/* Back to Collection */}
-                <div className="container mx-auto px-6 mb-8">
-                    <Link
-                        to={`/collections/${slug}`}
-                        className="inline-flex items-center gap-2 text-leather hover:text-rosegold transition-colors font-body text-sm mb-8 elegant-underline"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to {product.category}
-                    </Link>
-                </div>
-
-                {/* Product Section */}
-                <section className="container mx-auto px-6 mb-20">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        {/* Product Images */}
-                        <div className="relative">
-                            <div 
-                                ref={imageContainerRef}
-                                className="relative aspect-square overflow-hidden rounded-lg bg-champagne mb-4 cursor-zoom-in"
-                                onMouseMove={handleMouseMove}
-                                onMouseEnter={handleMouseEnter}
-                                onMouseLeave={handleMouseLeave}
-                                onClick={handleImageClick}
-                            >
-                                <AnimatePresence mode="wait">
-                                    <motion.img
-                                        key={currentImageIndex}
-                                        src={product.images[currentImageIndex]}
-                                        alt={`${product.name} - ${currentImageIndex + 1}`}
-                                        className="w-full h-full object-cover transition-transform duration-200 ease-out"
-                                        style={{
-                                            transform: isZoomed ? 'scale(2.5)' : 'scale(1)',
-                                            transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                                        }}
-                                        initial={{ opacity: 0, scale: 0.98 }}
-                                        animate={{ opacity: 1, scale: isZoomed ? 2.5 : 1 }}
-                                        exit={{ opacity: 0, scale: 1.02 }}
-                                        transition={{ duration: 0.3 }}
-                                    />
-                                </AnimatePresence>
-                                
-                                {/* Zoom Indicator */}
-                                {!isZoomed && (
-                                    <div className="absolute top-4 right-4 bg-black/60 text-white px-3 py-1.5 rounded-full text-xs flex items-center gap-1.5 pointer-events-none backdrop-blur-sm">
-                                        <ZoomIn className="w-3.5 h-3.5" />
-                                        <span className="font-medium">Hover to zoom</span>
-                                    </div>
-                                )}
-
-                                {/* Navigation Arrows */}
-                                {product.images.length > 1 && (
-                                    <>
-                                        <button
-                                            onClick={handlePrevImage}
-                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-ivory/80 backdrop-blur-sm flex items-center justify-center text-leather hover:bg-rosegold hover:text-ivory transition-all shadow-md"
-                                            aria-label="Previous image"
-                                        >
-                                            <ChevronLeft className="w-5 h-5" />
-                                        </button>
-                                        <button
-                                            onClick={handleNextImage}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-ivory/80 backdrop-blur-sm flex items-center justify-center text-leather hover:bg-rosegold hover:text-ivory transition-all shadow-md"
-                                            aria-label="Next image"
-                                        >
-                                            <ChevronRight className="w-5 h-5" />
-                                        </button>
-                                    </>
-                                )}
-
-                                {/* Favorite Button */}
-                                <button
-                                    onClick={() => setIsFavorite(!isFavorite)}
-                                    className={`absolute top-4 right-4 p-2 rounded-full ${isFavorite ? 'text-rose-500' : 'text-leather/80 hover:text-rose-500'} bg-ivory/80 backdrop-blur-sm transition-all`}
-                                    aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                                >
-                                    <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
-                                </button>
-                            </div>
-
-                            {/* Thumbnails */}
-                            {product.images.length > 1 && (
-                                <div className="flex gap-2 overflow-x-auto py-2 -mx-2 px-2">
-                                    {product.images.map((img: string, index: number) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => handleThumbnailClick(index)}
-                                            className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${currentImageIndex === index
-                                                ? 'border-rosegold'
-                                                : 'border-transparent hover:border-taupe/30'
-                                                }`}
-                                            aria-label={`View image ${index + 1}`}
-                                        >
-                                            <img
-                                                src={img}
-                                                alt={`${product.name} - Thumbnail ${index + 1}`}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Product Info */}
-                        <motion.div
-                            className="pt-4"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                        >
-                            <span className="uppercase text-xs tracking-wider text-taupe font-medium mb-2 block">
-                                {product.category}
-                            </span>
-
-                            <h1 className="text-3xl md:text-4xl font-serif text-leather mb-4 tracking-wide">
-                                {product.name}
-                            </h1>
-
-                            {/* <p className="text-2xl font-serif text-rosegold mb-6">
-                                {product.price}
-                            </p> */}
-
-                            <p className="text-leather/90 leading-relaxed mb-8 max-w-lg">
-                                {product.description}
-                            </p>
-
-                            <div className="mb-8">
-                                <h3 className="font-body font-medium text-leather mb-3">Details</h3>
-                                <ul className="space-y-2">
-                                    {product.details.map((detail: string, index: number) => (
-                                        <li key={index} className="flex items-center text-taupe text-sm">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-rosegold/70 mr-2"></span>
-                                            {detail}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div className="mb-8">
-                                <Button
-                                    onClick={() => {
-                                        const message = `Hi, I'm interested in the ${product.name} (${product.category}). Could you please provide me with more information on the same?`;
-                                        const encodedMessage = encodeURIComponent(message);
-                                        window.open(`https://wa.me/9834174885?text=${encodedMessage}`, '_blank');
-                                    }}
-                                    className="w-full bg-gradient-to-r from-rosegold to-mauve hover:shadow-hover transition-all duration-300 text-ivory font-body tracking-elegant px-8 py-6 rounded-full text-lg"
-                                    size="lg"
-                                >
-                                    Send Enquiry on WhatsApp
-                                </Button>
-                            </div>
-
-                            <div className="flex items-center gap-4 pt-4 border-t border-taupe/10">
-                                <button className="flex items-center text-taupe hover:text-rosegold transition-colors">
-                                    <Share2 className="w-4 h-4 mr-2" />
-                                    <span className="text-sm">Share</span>
-                                </button>
-                                <button className="flex items-center text-taupe hover:text-rosegold transition-colors">
-                                    <Heart className="w-4 h-4 mr-2" />
-                                    <span className="text-sm">Save for later</span>
-                                </button>
-                            </div>
-                        </motion.div>
-                    </div>
-                </section>
-
-                {/* You May Also Like Section */}
-                <section className="bg-champagne/30 py-16">
-                    <div className="container mx-auto px-6">
-                        <h2 className="text-2xl font-serif text-leather mb-8 text-center">
-                            You May Also Like
-                        </h2>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {relatedProducts.map((item) => (
-                                <motion.div
-                                    key={item.id}
-                                    className="group"
-                                    whileHover={{ y: -5 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <Link to={`/collections/${product?.category}/${item.id}`}>
-                                        <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
-                                            <div className="aspect-square overflow-hidden bg-champagne">
-                                                <img
-                                                    src={item.image}
-                                                    alt={item.name}
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                />
-                                            </div>
-                                            <div className="absolute inset-0 bg-rosegold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                        </div>
-                                        <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
-                                            {item.name}
-                                        </h3>
-                                        {/* <p className="font-body text-taupe tracking-elegant">
-                                            {item.price}
-                                        </p> */}
-                                    </Link>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            </main>
-
-            <Footer />
-            
-            {/* Full Screen Zoom Modal */}
-            <AnimatePresence>
-                {showZoomModal && (
-                    <motion.div
-                        className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setShowZoomModal(false)}
-                    >
-                        {/* Close Button */}
-                        <button
-                            className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors z-10 bg-black/30 hover:bg-black/50 rounded-full p-2"
-                            onClick={() => setShowZoomModal(false)}
-                            aria-label="Close"
-                        >
-                            <X className="w-8 h-8" />
-                        </button>
-                        
-                        <div className="relative max-w-7xl max-h-[95vh] w-full h-full flex items-center justify-center p-4">
-                            <motion.img
-                                src={product.images[currentImageIndex]}
-                                alt={`${product.name} - Enlarged view`}
-                                className="max-w-full max-h-full object-contain"
-                                initial={{ scale: 0.9, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.9, opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                onClick={(e) => e.stopPropagation()}
-                            />
-                            
-                            {/* Navigation Arrows in Modal */}
-                            {product.images.length > 1 && (
-                                <>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handlePrevImage();
-                                        }}
-                                        className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-4 rounded-full transition-all shadow-lg"
-                                        aria-label="Previous image"
-                                    >
-                                        <ChevronLeft className="w-6 h-6" />
-                                    </button>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleNextImage();
-                                        }}
-                                        className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-4 rounded-full transition-all shadow-lg"
-                                        aria-label="Next image"
-                                    >
-                                        <ChevronRight className="w-6 h-6" />
-                                    </button>
-                                </>
-                            )}
-                            
-                            {/* Image Counter */}
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm text-white px-5 py-2.5 rounded-full text-sm font-medium">
-                                {currentImageIndex + 1} / {product.images.length}
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
+      <div className="min-h-screen bg-ivory flex items-center justify-center">
+        <p className="text-leather font-body">Loading product...</p>
+      </div>
     );
+  }
+
+  //
+  // PRODUCT NOT FOUND
+  //
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-ivory">
+        <Navbar />
+        <div className="container mx-auto px-6 pt-32 pb-16 text-center">
+          <h1 className="text-4xl font-serif text-leather mb-4">
+            Product Not Found
+          </h1>
+          <Link
+            to={`/collections/${slug}`}
+            className="text-rosegold hover:underline font-body"
+          >
+            Return to Products
+          </Link>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  //
+  // IMAGES ARRAY
+  //
+  const images =
+    product.images?.map((img: any) => img?.image?.url).filter(Boolean) ?? [];
+
+  const productName = product.name || "Product";
+
+  const designTypeName =
+    product?.design_type?.data?.design_name?.[0]?.text;
+
+  return (
+    <div className="min-h-screen bg-ivory">
+      <Navbar />
+
+      <main className="pt-24 pb-16">
+        {/* BACK BUTTON */}
+        <div className="container mx-auto px-6 mb-8">
+          <Link
+            to={`/collections/${slug}`}
+            className="inline-flex items-center gap-2 text-leather hover:text-rosegold transition-colors font-body text-sm elegant-underline"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to {asText(category?.category_type) || "Collection"}
+          </Link>
+        </div>
+
+        {/* PRODUCT CONTENT */}
+        <section className="container mx-auto px-6 mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* IMAGE GALLERY */}
+            <div className="relative">
+              <div className="relative aspect-square overflow-hidden rounded-lg mb-4">
+                <AnimatePresence mode="wait">
+                  <motion.div className="relative w-full h-full">
+                    <motion.img
+                      key={currentImage}
+                      src={images[currentImage]}
+                      alt={productName}
+                      className="w-full h-full object-cover"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Slider Arrows */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-ivory/80 text-leather hover:bg-rosegold hover:text-ivory transition-all"
+                      onClick={() =>
+                        setCurrentImage((i) =>
+                          i === 0 ? images.length - 1 : i - 1
+                        )
+                      }
+                    >
+                      <ChevronLeft className="relative left-1.5" />
+                    </button>
+
+                    <button
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-ivory/80 text-leather hover:bg-rosegold hover:text-ivory transition-all"
+                      onClick={() =>
+                        setCurrentImage((i) =>
+                          i === images.length - 1 ? 0 : i + 1
+                        )
+                      }
+                    >
+                      <ChevronRight className="relative left-2" />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Thumbnails */}
+              <div className="flex gap-2 overflow-x-auto py-2">
+                {images.map((img: string, i: number) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentImage(i)}
+                    className={`w-20 h-20 rounded-md overflow-hidden border-2 relative ${currentImage === i
+                        ? "border-rosegold"
+                        : "border-transparent"
+                      }`}
+                  >
+                    <img
+                      src={img}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* PRODUCT INFO */}
+            <motion.div
+              className="pt-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {/* Category Name */}
+              <span className="uppercase text-xs tracking-wider text-taupe mb-2 block">
+                {asText(category?.category_type)}
+              </span>
+
+              {/* Product Name */}
+              <h1 className="text-3xl md:text-4xl font-serif text-leather mb-4 tracking-wide">
+                {productName}
+              </h1>
+
+              {/* Description */}
+              {product.description && (
+                <p className="text-leather/90 leading-relaxed mb-8 max-w-lg">
+                  {asText(product.description)}
+                </p>
+              )}
+
+              {/* Details List */}
+              {product.details?.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="font-body font-medium text-leather mb-3">
+                    Details
+                  </h3>
+
+                  <ul className="space-y-2">
+                    {/* Show Design Type once */}
+                    {designTypeName && (
+                      <li key="designType" className="text-taupe text-sm">
+                        • {designTypeName} Design
+                      </li>
+                    )}
+
+                    {/* All other details */}
+                    {product.details.map((d: any, index: number) => (
+                      <li key={index} className="text-taupe text-sm">
+                        • {d.detail}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* WhatsApp CTA */}
+              <div className="space-y-4">
+                {product.out_of_stock && (
+                  <div className="bg-ivory/90 border border-rosegold/20 p-4 rounded-lg text-center">
+                    <p className="text-taupe">
+                      This item is currently out of stock, but we can help you get it!
+                      Contact us for availability and delivery time.
+                    </p>
+                  </div>
+                )}
+
+                <Button
+                  onClick={() => {
+                    const msg = encodeURIComponent(
+                      `Hello, I'm interested in the ${productName}. Please share more details.`
+                    );
+                    window.open(`https://wa.me/9834174885?text=${msg}`, "_blank");
+                  }}
+                  className="w-full bg-gradient-to-r from-rosegold to-mauve text-ivory rounded-full py-6 text-lg"
+                >
+                  Send Enquiry on WhatsApp
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {relatedProducts.length > 0 && (
+          <section className="bg-champagne/30 py-16">
+            <div className="container mx-auto px-6">
+              <h2 className="text-2xl font-serif text-leather mb-8 text-center">
+                You May Also Like
+              </h2>
+
+              {relatedProductsLoading ? (
+                <div className="text-center py-8">
+                  <p className="text-taupe">Loading related products...</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {relatedProducts
+                    .filter((p) => p.uid !== productUid) // Exclude current product
+                    .slice(0, 3) // Show maximum 3 related products
+                    .map((item) => {
+                      const imageUrl = item.data.images?.[0]?.image?.url || "";
+                      const productCategory =
+                        item.data.category?.uid || "collection";
+
+                      return (
+                        <motion.div
+                          key={item.id}
+                          className="group"
+                          whileHover={{ y: -5 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Link
+                            to={`/collections/${productCategory}/${item.uid}`}
+                            state={{
+                              productData: {
+                                ...item.data,
+                                uid: item.uid,
+                                category: {
+                                  id: item.data.category?.id,
+                                  slug: productCategory,
+                                },
+                              },
+                            }}
+                          >
+                            <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
+
+                          {/* IMAGE */}
+                          <div
+                            className={`aspect-square overflow-hidden bg-champagne ${item.data.out_of_stock ? "opacity-60 grayscale" : ""
+                              }`}
+                          >
+                            {imageUrl ? (
+                              <img
+                                src={imageUrl}
+                                alt={item.data.name}
+                                className={`w-full h-full object-cover transition-transform duration-700 ${item.data.out_of_stock ? "" : "group-hover:scale-110"
+                                  }`}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-taupe">
+                                No image
+                              </div>
+                            )}
+                          </div>
+
+                          {/* OUT OF STOCK OVERLAY */}
+                          {item.data.out_of_stock && (
+                            <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                              <span className="text-ivory font-serif text-xl tracking-wide">
+                                Out of Stock
+                              </span>
+                            </div>
+                          )}
+
+                        </div>
+                            <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
+                              {item.data.name || "Unnamed Product"}
+                            </h3>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+      </main>
+
+      <Footer />
+    </div>
+  );
 };
 
 export default ProductDetail;
