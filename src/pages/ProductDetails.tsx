@@ -29,6 +29,9 @@ const ProductDetail = () => {
   const { products: relatedProducts, loading: relatedProductsLoading } =
     useProducts(product?.category?.id);
 
+  // Get WhatsApp number from environment variable
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+
   //
   // FETCH PRODUCT + CATEGORY
   //
@@ -112,8 +115,7 @@ const ProductDetail = () => {
 
   const productName = product.name || "Product";
 
-  const designTypeName =
-    product?.design_type?.data?.design_name?.[0]?.text;
+  const designTypeName = product?.design_type?.data?.design_name?.[0]?.text;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -143,7 +145,7 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* IMAGE GALLERY */}
             <div className="relative">
-              <div 
+              <div
                 className="relative aspect-square overflow-hidden rounded-lg mb-4 cursor-zoom-in"
                 onMouseMove={handleMouseMove}
                 onMouseEnter={() => setIsZoomed(true)}
@@ -158,7 +160,7 @@ const ProductDetail = () => {
                       alt={productName}
                       className="w-full h-full object-cover transition-transform duration-200"
                       style={{
-                        transform: isZoomed ? 'scale(2)' : 'scale(1)',
+                        transform: isZoomed ? "scale(2)" : "scale(1)",
                         transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
                       }}
                       initial={{ opacity: 0 }}
@@ -167,7 +169,7 @@ const ProductDetail = () => {
                     />
                   </motion.div>
                 </AnimatePresence>
-                
+
                 {/* Zoom Indicator */}
                 <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-xs flex items-center gap-1 pointer-events-none">
                   <ZoomIn className="w-3 h-3" />
@@ -208,15 +210,13 @@ const ProductDetail = () => {
                   <button
                     key={i}
                     onClick={() => setCurrentImage(i)}
-                    className={`w-20 h-20 rounded-md overflow-hidden border-2 relative ${currentImage === i
+                    className={`w-20 h-20 rounded-md overflow-hidden border-2 relative ${
+                      currentImage === i
                         ? "border-rosegold"
                         : "border-transparent"
-                      }`}
+                    }`}
                   >
-                    <img
-                      src={img}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={img} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -275,8 +275,8 @@ const ProductDetail = () => {
                 {product.out_of_stock && (
                   <div className="bg-ivory/90 border border-rosegold/20 p-4 rounded-lg text-center">
                     <p className="text-taupe">
-                      This item is currently out of stock, but we can help you get it!
-                      Contact us for availability and delivery time.
+                      This item is currently out of stock, but we can help you
+                      get it! Contact us for availability and delivery time.
                     </p>
                   </div>
                 )}
@@ -285,28 +285,33 @@ const ProductDetail = () => {
                   onClick={() => {
                     // Build concise WhatsApp message
                     let message = `Hello, I'm interested in the *${productName}*`;
-                    
+
                     // Add category if available
                     if (category?.category_type) {
-                      message += ` from your ${asText(category.category_type)} collection`;
+                      message += ` from your ${asText(
+                        category.category_type
+                      )} collection`;
                     }
-                    
+
                     message += `.\n\n`;
-                    
+
                     // Add design type if available
                     if (designTypeName) {
                       message += `Design: ${designTypeName}\n`;
                     }
-                    
+
                     // Add stock status if out of stock
                     if (product.out_of_stock) {
                       message += `\nNote: I understand this is currently out of stock.\n`;
                     }
-                    
+
                     message += `\nPlease share pricing and availability details.\n\nThank you.`;
-                    
+
                     const encodedMsg = encodeURIComponent(message);
-                    window.open(`https://wa.me/9834174885?text=${encodedMsg}`, "_blank");
+                    window.open(
+                      `https://wa.me/${whatsappNumber}?text=${encodedMsg}`,
+                      "_blank"
+                    );
                   }}
                   className="w-full bg-gradient-to-r from-rosegold to-mauve text-ivory rounded-full py-6 text-lg"
                 >
@@ -359,36 +364,40 @@ const ProductDetail = () => {
                             }}
                           >
                             <div className="relative overflow-hidden rounded-lg shadow-soft hover:shadow-hover transition-all duration-500 mb-4">
-
-                          {/* IMAGE */}
-                          <div
-                            className={`aspect-square overflow-hidden bg-champagne ${item.data.out_of_stock ? "opacity-60 grayscale" : ""
-                              }`}
-                          >
-                            {imageUrl ? (
-                              <img
-                                src={imageUrl}
-                                alt={item.data.name}
-                                className={`w-full h-full object-cover transition-transform duration-700 ${item.data.out_of_stock ? "" : "group-hover:scale-110"
-                                  }`}
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-taupe">
-                                No image
+                              {/* IMAGE */}
+                              <div
+                                className={`aspect-square overflow-hidden bg-champagne ${
+                                  item.data.out_of_stock
+                                    ? "opacity-60 grayscale"
+                                    : ""
+                                }`}
+                              >
+                                {imageUrl ? (
+                                  <img
+                                    src={imageUrl}
+                                    alt={item.data.name}
+                                    className={`w-full h-full object-cover transition-transform duration-700 ${
+                                      item.data.out_of_stock
+                                        ? ""
+                                        : "group-hover:scale-110"
+                                    }`}
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-taupe">
+                                    No image
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
 
-                          {/* OUT OF STOCK OVERLAY */}
-                          {item.data.out_of_stock && (
-                            <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                              <span className="text-ivory font-serif text-xl tracking-wide">
-                                Out of Stock
-                              </span>
+                              {/* OUT OF STOCK OVERLAY */}
+                              {item.data.out_of_stock && (
+                                <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                                  <span className="text-ivory font-serif text-xl tracking-wide">
+                                    Out of Stock
+                                  </span>
+                                </div>
+                              )}
                             </div>
-                          )}
-
-                        </div>
                             <h3 className="font-serif text-xl text-leather mb-1 tracking-elegant group-hover:text-rosegold transition-colors">
                               {item.data.name || "Unnamed Product"}
                             </h3>
@@ -404,7 +413,7 @@ const ProductDetail = () => {
       </main>
 
       <Footer />
-      
+
       {/* Zoom Modal */}
       <AnimatePresence>
         {showZoomModal && images.length > 0 && (
@@ -421,7 +430,7 @@ const ProductDetail = () => {
             >
               <X className="w-8 h-8" />
             </button>
-            
+
             <div className="relative max-w-6xl max-h-[90vh] w-full h-full flex items-center justify-center">
               <motion.img
                 src={images[currentImage]}
@@ -433,14 +442,16 @@ const ProductDetail = () => {
                 transition={{ duration: 0.3 }}
                 onClick={(e) => e.stopPropagation()}
               />
-              
+
               {/* Navigation in Modal */}
               {images.length > 1 && (
                 <>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setCurrentImage((i) => i === 0 ? images.length - 1 : i - 1);
+                      setCurrentImage((i) =>
+                        i === 0 ? images.length - 1 : i - 1
+                      );
                     }}
                     className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all"
                   >
@@ -449,7 +460,9 @@ const ProductDetail = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setCurrentImage((i) => i === images.length - 1 ? 0 : i + 1);
+                      setCurrentImage((i) =>
+                        i === images.length - 1 ? 0 : i + 1
+                      );
                     }}
                     className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all"
                   >
@@ -457,7 +470,7 @@ const ProductDetail = () => {
                   </button>
                 </>
               )}
-              
+
               {/* Image Counter */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
                 {currentImage + 1} / {images.length}

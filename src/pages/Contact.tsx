@@ -48,7 +48,7 @@ const Contact = () => {
         `*Message:* ${message}%0A`;
 
       // Replace with your WhatsApp number
-      const whatsappNumber = "9834174885";
+      const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
 
       const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
